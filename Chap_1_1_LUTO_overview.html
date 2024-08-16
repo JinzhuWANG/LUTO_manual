@@ -369,52 +369,6 @@ document.write(`
 <p>LUTO-2 is capable of running land-use change for Australia at a ~1x1 square kilometer scale, but this chapter will use a setting that specifies <code class="docutils literal notranslate"><span class="pre">RESFACTOR=5</span></code> to reduce processing time. Essentially, this resfactor means we are only using the centroid cell out of each 5*5 square matrix to run the model.</p>
 </div>
 <p>Here we run LUTO-2 model to get necessary data variables for illustrating how the model works. LUTO converts all input data into <code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> for every processing, but in the manual we use <code class="docutils literal notranslate"><span class="pre">xarray.DataArray</span></code> for more easier data manupilation. The main advantage of <code class="docutils literal notranslate"><span class="pre">xarray</span></code> over <code class="docutils literal notranslate"><span class="pre">numpy</span></code> is that it can lable high-dimension array (usually being called as a ‘Tensor’ or ‘nd-Matrices’) with sensible names.</p>
-<div class="cell tag_hide-cell docutils container">
-<details class="hide above-input">
-<summary aria-label="Toggle hidden content">
-<span class="collapsed">Show code cell content</span>
-<span class="expanded">Hide code cell content</span>
-</summary>
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># HIDDEN</span>
-
-<span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">Here are the code to run LUTO first, so that we can have the variables and objects required for illustration in the notebook.</span>
-<span class="sd">&#39;&#39;&#39;</span>
-
-<span class="c1"># Reload all modules before excuting each cell, so that we can modify the imported custom functions on-the-fly without rerun the whole model.</span>
-<span class="o">%</span><span class="k">load_ext</span> autoreload
-<span class="o">%</span><span class="k">autoreload</span> 2
-
-
-<span class="c1"># Imports</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">xarray</span> <span class="k">as</span> <span class="nn">xr</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">plotnine</span> <span class="k">as</span> <span class="nn">p9</span>
-<span class="kn">from</span> <span class="nn">mizani.formatters</span> <span class="kn">import</span> <span class="n">scientific_format</span>
-
-
-
-<span class="c1"># cd to the root folder of LUTO project</span>
-<span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="s1">&#39;N:/LUF-Modelling/LUTO2_JZ/luto-2.0&#39;</span><span class="p">)</span>
-<span class="kn">from</span> <span class="nn">luto.tools.Manual_jupyter_books.helpers</span> <span class="kn">import</span> <span class="n">map_to_4band</span><span class="p">,</span> <span class="n">mrj_to_xr</span><span class="p">,</span> <span class="n">arr_to_xr</span><span class="p">,</span> <span class="n">map_to_plot</span>
-<span class="kn">from</span> <span class="nn">luto.economics.agricultural.quantity</span> <span class="kn">import</span> <span class="n">get_quantity_matrices</span>
-<span class="kn">from</span> <span class="nn">luto.economics.agricultural.water</span> <span class="kn">import</span> <span class="n">get_wreq_matrices</span>
-<span class="kn">from</span> <span class="nn">luto.tools.Manual_jupyter_books.helpers.parameters</span> <span class="kn">import</span> <span class="n">legend_params</span>
-
-
-<span class="c1"># # Run LUTO</span>
-<span class="c1"># import luto.simulation as sim</span>
-<span class="c1"># data = sim.load_data()</span>
-<span class="c1"># sim.run(data=data, base=2010, target=2050)</span>
-</pre></div>
-</div>
-</div>
-</details>
-</div>
 <p>Before get our head into the amazing LUTO world, please keep in mind that this manual tris to explain how LUTO works in the most intuitive way. That means sometime we may loss technical depth or skip over certain complexities. If you are keen to understand how exactly this model works, we encourage you to look at the source code and  and delve into the tech/data manul provided under the <code class="docutils literal notranslate"><span class="pre">/docs</span></code>.</p>
 <section id="national-land-use-map-of-australia-for-2010">
 <h2>National Land-use Map of Australia for 2010<a class="headerlink" href="#national-land-use-map-of-australia-for-2010" title="Link to this heading">#</a></h2>
@@ -508,103 +462,9 @@ document.write(`
 </table>
 </div>
 <p>It is overwhelming to consider all 28 agricultural land-use for illustration. Instead, let’s only map the sptail distribution of <code class="docutils literal notranslate"><span class="pre">Winter</span> <span class="pre">cereals</span></code> under minimized-cost/maximized-profit drives given various constraints. Referring to table above, we know that the code of 25 is winter cereal. We will use this value to extract the map of winter cereal.</p>
-<div class="cell tag_hide-cell docutils container">
-<details class="hide above-input">
-<summary aria-label="Toggle hidden content">
-<span class="collapsed">Show code cell content</span>
-<span class="expanded">Hide code cell content</span>
-</summary>
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># HIDDEN</span>
-
-<span class="c1"># Define year, lu_code</span>
-<span class="n">year_begin</span> <span class="o">=</span> <span class="mi">2010</span>
-<span class="n">year_target</span> <span class="o">=</span> <span class="mi">2050</span>
-<span class="n">lu_code</span> <span class="o">=</span> <span class="mi">25</span> <span class="c1"># Winter cereals</span>
-<span class="n">lu_desc</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">AGRICULTURAL_LANDUSES</span><span class="p">[</span><span class="n">lu_code</span><span class="p">]</span>
-
-<span class="c1"># Parameters to save xarray</span>
-<span class="n">output_dir</span> <span class="o">=</span> <span class="s1">&#39;luto/tools/Manual_jupyter_books/outputs&#39;</span>
-<span class="n">encoding</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;compression&quot;</span><span class="p">:</span> <span class="s2">&quot;gzip&quot;</span><span class="p">,</span> <span class="s2">&quot;compression_opts&quot;</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span>  <span class="s2">&quot;dtype&quot;</span><span class="p">:</span> <span class="s1">&#39;float32&#39;</span><span class="p">}}</span>
-
-<span class="c1"># Get the lumap</span>
-<span class="n">lumap</span> <span class="o">=</span> <span class="n">mrj_to_xr</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">ag_dvars</span><span class="p">[</span><span class="n">year_begin</span><span class="p">])</span>
-<span class="n">lu_arr_dry</span> <span class="o">=</span> <span class="n">lumap</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lm</span><span class="o">=</span><span class="s1">&#39;dry&#39;</span><span class="p">,</span> <span class="n">lu</span><span class="o">=</span><span class="n">lu_desc</span><span class="p">)</span>
-<span class="n">lu_arr_irr</span> <span class="o">=</span> <span class="n">lumap</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lm</span><span class="o">=</span><span class="s1">&#39;irr&#39;</span><span class="p">,</span> <span class="n">lu</span><span class="o">=</span><span class="n">lu_desc</span><span class="p">)</span>
-
-<span class="n">lu_mask</span> <span class="o">=</span> <span class="n">arr_to_xr</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">lumap</span><span class="p">))</span> <span class="o">==</span> <span class="mi">1</span>
-<span class="n">lu_area</span> <span class="o">=</span> <span class="n">arr_to_xr</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">REAL_AREA</span><span class="p">)</span>
-
-
-<span class="c1"># Save to disk</span>
-<span class="n">lu_arr_dry</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;data&#39;</span>
-<span class="n">lu_arr_irr</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;data&#39;</span>
-
-<span class="n">lu_arr_dry</span><span class="o">.</span><span class="n">to_netcdf</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">output_dir</span><span class="si">}</span><span class="s1">/lu_arr_dry.nc&#39;</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s1">&#39;h5netcdf&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">)</span>
-<span class="n">lu_arr_irr</span><span class="o">.</span><span class="n">to_netcdf</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">output_dir</span><span class="si">}</span><span class="s1">/lu_arr_irr.nc&#39;</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s1">&#39;h5netcdf&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">line</span> <span class="mi">7</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="n">year_target</span> <span class="o">=</span> <span class="mi">2050</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="n">lu_code</span> <span class="o">=</span> <span class="mi">25</span> <span class="c1"># Winter cereals</span>
-<span class="ne">----&gt; </span><span class="mi">7</span> <span class="n">lu_desc</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">AGRICULTURAL_LANDUSES</span><span class="p">[</span><span class="n">lu_code</span><span class="p">]</span>
-<span class="g g-Whitespace">      </span><span class="mi">9</span> <span class="c1"># Parameters to save xarray</span>
-<span class="g g-Whitespace">     </span><span class="mi">10</span> <span class="n">output_dir</span> <span class="o">=</span> <span class="s1">&#39;luto/tools/Manual_jupyter_books/outputs&#39;</span>
-
-<span class="ne">NameError</span>: name &#39;data&#39; is not defined
-</pre></div>
-</div>
-</div>
-</details>
-</div>
 <p>It is important to acknowledge that the same land-use under different water supply management (<code class="docutils literal notranslate"><span class="pre">dry</span></code> or <code class="docutils literal notranslate"><span class="pre">irrigated</span></code>) requires significantly different water consumption and economic investment, which ultimately leads to very different yields. To account for this, LUTO-2 introduces a dry/irrigation map that further classifies agricultural land-use into dry land or irrigated land. In this manual, we will split winter cereals into their corresponding dry and irrigated parts. Additionally, input data such as ‘water requirement,’ ‘GHG release,’ and ‘cost’ are provided with a water supply attribution.</p>
 <p>If you have a pair of eagle eyes, you can find that only a very small number of irradiated winter cereal cells are scattered in Victoria.</p>
-<div class="cell tag_hide-input docutils container">
-<details class="hide above-input">
-<summary aria-label="Toggle hidden content">
-<span class="collapsed">Show code cell source</span>
-<span class="expanded">Hide code cell source</span>
-</summary>
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># HIDE CODE</span>
-
-<span class="c1"># Get colors/names for pixcels with values of [-1, 0, 1]</span>
-<span class="n">colors</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">(</span><span class="mi">231</span><span class="p">,</span> <span class="mi">232</span><span class="p">,</span> <span class="mi">234</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span> <span class="c1"># Light grey</span>
-    <span class="p">(</span><span class="mi">169</span><span class="p">,</span> <span class="mi">209</span><span class="p">,</span> <span class="mi">229</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span> <span class="c1"># Light blue</span>
-    <span class="p">(</span><span class="mi">236</span><span class="p">,</span> <span class="mi">147</span><span class="p">,</span> <span class="mi">116</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span>  <span class="c1"># Light red</span>
-<span class="p">]</span>
-
-<span class="n">cell_names</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s1">&#39;Non-Agricultural&#39;</span><span class="p">,</span> 
-    <span class="s1">&#39;Other Agricultural&#39;</span><span class="p">,</span> 
-    <span class="s1">&#39;Winter cereals&#39;</span>
-<span class="p">]</span>
-
-<span class="c1"># Create a figure and a set of subplots with 1 row and 2 columns</span>
-<span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
-
-<span class="c1"># Plot the first map (dry) on the first axis</span>
-<span class="n">map_to_plot</span><span class="p">(</span><span class="n">lu_arr_dry</span><span class="p">,</span> <span class="n">colors</span><span class="p">,</span> <span class="n">cell_names</span><span class="p">,</span> <span class="n">legend_params</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;lm = dry, lu = </span><span class="si">{</span><span class="n">lu_desc</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-
-<span class="c1"># Plot the second map (irr) on the second axis</span>
-<span class="n">map_to_plot</span><span class="p">(</span><span class="n">lu_arr_irr</span><span class="p">,</span> <span class="n">colors</span><span class="p">,</span> <span class="n">cell_names</span><span class="p">,</span> <span class="n">legend_params</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;lm = irr, lu = </span><span class="si">{</span><span class="n">lu_desc</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-
-<span class="c1"># Optionally, adjust the layout</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-
-<span class="c1"># Show the combined plots</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-</details>
+<div class="cell tag_remove-input docutils container">
 <div class="cell_output docutils container">
 <img alt="_images/852fcc4126a1925407ec28f31173d0e76a73e8d95f7f1b250974a307fd53389b.png" src="_images/852fcc4126a1925407ec28f31173d0e76a73e8d95f7f1b250974a307fd53389b.png" />
 </div>
@@ -614,19 +474,7 @@ document.write(`
 <section id="demand">
 <h2>Demand<a class="headerlink" href="#demand" title="Link to this heading">#</a></h2>
 <p>As an agricultural model, the first target to meet is the food demand. The demand data (tones) is a <code class="docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code> lives in the <code class="docutils literal notranslate"><span class="pre">data.DEMAND_DATA</span></code> variable. We can see that the index of the demand dataframe is commodities, the column is a 2-level column that represents demand compositions and years.</p>
-<div class="cell tag_hide-input docutils container">
-<details class="hide above-input">
-<summary aria-label="Toggle hidden content">
-<span class="collapsed">Show code cell source</span>
-<span class="expanded">Hide code cell source</span>
-</summary>
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># HIDE CODE</span>
-<span class="n">data</span><span class="o">.</span><span class="n">DEMAND_DATA</span>
-</pre></div>
-</div>
-</div>
-</details>
+<div class="cell tag_remove-input docutils container">
 <div class="cell_output docutils container">
 <div class="output text_html"><div>
 <style scoped>
@@ -7247,58 +7095,13 @@ document.write(`
 </table>
 </div>
 <p>The reason for “why 2 more commodities” is that there are two land uses (unallocated land) that do not produce any commodities, and 4 commodities (aquculture, chicken, egg, and pork) cannot be produced from any land use. The math is simple, but it leads to another problem: If there are 4 additional commodities that cannot be produced by any land use, how can LUTO meet these demands by rearranging land use distributions? The answer is that LUTO assumes that the demand for these 4 commodities will be met in the target year, and LUTO arranges land-use to mitigate their environmental impacts. For example, to meet the demand for eggs in 2030, a total of 500 kt of GHG were emitted. LUTO will then try to plant more trees to sequestrate these carbons. In this way, LUTO considers both on-land (commodities produced directly from land) and off-land (commodities produced from cages or factories) commodities, making itself a more complete agricutural model.</p>
-<div class="cell tag_hide-input docutils container">
-<details class="hide above-input">
-<summary aria-label="Toggle hidden content">
-<span class="collapsed">Show code cell source</span>
-<span class="expanded">Hide code cell source</span>
-</summary>
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># HIDE CODE</span>
-
-<span class="c1"># Get the demand data</span>
-<span class="n">demand_df</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">DEMAND_DATA</span><span class="o">.</span><span class="n">unstack</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
-<span class="n">demand_df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Type&#39;</span><span class="p">,</span> <span class="s1">&#39;Year&#39;</span><span class="p">,</span> <span class="s1">&#39;Commodity&#39;</span><span class="p">,</span> <span class="s1">&#39;Value&#39;</span><span class="p">]</span>
-
-
-<span class="c1"># Get the demand for the selected land use</span>
-<span class="n">demand_lu</span> <span class="o">=</span> <span class="n">demand_df</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s1">&#39;Type == &quot;PRODUCTION&quot; and Commodity == @lu_desc.lower()&#39;</span><span class="p">)</span>
-
-
-<span class="c1"># Plot the demand</span>
-<span class="n">fig</span> <span class="o">=</span> <span class="p">(</span><span class="n">p9</span><span class="o">.</span><span class="n">ggplot</span><span class="p">(</span><span class="n">demand_lu</span><span class="p">,</span> <span class="n">p9</span><span class="o">.</span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;Year&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Value&#39;</span><span class="p">))</span>
-    <span class="o">+</span> <span class="n">p9</span><span class="o">.</span><span class="n">geom_line</span><span class="p">()</span>
-    <span class="o">+</span> <span class="n">p9</span><span class="o">.</span><span class="n">theme_bw</span><span class="p">()</span>
-    <span class="o">+</span> <span class="n">p9</span><span class="o">.</span><span class="n">labs</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;Demand for </span><span class="si">{</span><span class="n">lu_desc</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;Year&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Demand (million tonnes)&#39;</span><span class="p">)</span>
-    <span class="o">+</span> <span class="n">p9</span><span class="o">.</span><span class="n">scale_y_continuous</span><span class="p">(</span><span class="n">labels</span><span class="o">=</span><span class="k">lambda</span> <span class="n">f</span><span class="p">:</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">x</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">1e6</span><span class="si">:</span><span class="s1">.0f</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">f</span><span class="p">])</span>
-    <span class="p">)</span>
-
-<span class="n">fig</span>
-</pre></div>
-</div>
-</div>
-</details>
+<div class="cell tag_remove-input docutils container">
 <div class="cell_output docutils container">
 <a class="reference internal image-reference" href="_images/df966475254fa1a754d85d87f95b43069c03bd8c0ec16da0ddacc55311825876.png"><img alt="_images/df966475254fa1a754d85d87f95b43069c03bd8c0ec16da0ddacc55311825876.png" src="_images/df966475254fa1a754d85d87f95b43069c03bd8c0ec16da0ddacc55311825876.png" style="width: 640px; height: 480px;" /></a>
 </div>
 </div>
-<p>Now we can simply query the demand data for year 2050 and we will get target to meet.</p>
-<div class="cell tag_hide-input docutils container">
-<details class="hide above-input">
-<summary aria-label="Toggle hidden content">
-<span class="collapsed">Show code cell source</span>
-<span class="expanded">Hide code cell source</span>
-</summary>
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># HIDE CODE</span>
-<span class="c1"># Get the demand for the target year</span>
-<span class="n">demand_vol</span> <span class="o">=</span> <span class="n">demand_lu</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s1">&#39;Year == @year_target&#39;</span><span class="p">)[</span><span class="s1">&#39;Value&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mf">1e6</span>  <span class="c1"># Million tonnes</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;The demand for </span><span class="si">{</span><span class="n">lu_desc</span><span class="si">}</span><span class="s1"> in </span><span class="si">{</span><span class="n">year_target</span><span class="si">}</span><span class="s1"> is </span><span class="si">{</span><span class="n">demand_vol</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1"> million tonnes.&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</details>
+<p>Now we can simply query the demand data for year 2050 and we will get the target to meet.</p>
+<div class="cell tag_remove-input docutils container">
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The demand for Winter cereals in 2050 is 77.31 million tonnes.
 </pre></div>
@@ -7348,200 +7151,10 @@ document.write(`
 </tbody>
 </table>
 </div>
-<div class="cell tag_hide-cell docutils container">
-<details class="hide above-input">
-<summary aria-label="Toggle hidden content">
-<span class="collapsed">Show code cell content</span>
-<span class="expanded">Hide code cell content</span>
-</summary>
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># HIDDEN</span>
-<span class="n">dd</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_hdf</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;input&#39;</span><span class="p">,</span> <span class="s1">&#39;demand_projections.h5&#39;</span><span class="p">)</span> <span class="p">)</span>
-<span class="n">dd_long</span> <span class="o">=</span> <span class="n">dd</span><span class="p">[</span><span class="s1">&#39;PRODUCTION&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">stack</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="s1">&#39;DEMAND_TONNES&#39;</span><span class="p">})</span>
-<span class="n">dd_long</span>
-</pre></div>
-</div>
-</div>
+<div class="cell tag_remove-input docutils container">
 <div class="cell_output docutils container">
-<div class="output text_html"><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>SCENARIO</th>
-      <th>DIET_DOM</th>
-      <th>DIET_GLOB</th>
-      <th>CONVERGENCE</th>
-      <th>IMPORT_TREND</th>
-      <th>WASTE</th>
-      <th>FEED_EFFICIENCY</th>
-      <th>COMMODITY</th>
-      <th>YEAR</th>
-      <th>DEMAND_TONNES</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>SSP1</td>
-      <td>BAU</td>
-      <td>BAU</td>
-      <td>2050</td>
-      <td>Static</td>
-      <td>0.5000</td>
-      <td>BAU</td>
-      <td>apples</td>
-      <td>2010</td>
-      <td>262,358.1418</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>SSP1</td>
-      <td>BAU</td>
-      <td>BAU</td>
-      <td>2050</td>
-      <td>Static</td>
-      <td>0.5000</td>
-      <td>BAU</td>
-      <td>apples</td>
-      <td>2011</td>
-      <td>284,784.3501</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>SSP1</td>
-      <td>BAU</td>
-      <td>BAU</td>
-      <td>2050</td>
-      <td>Static</td>
-      <td>0.5000</td>
-      <td>BAU</td>
-      <td>apples</td>
-      <td>2012</td>
-      <td>276,239.4804</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>SSP1</td>
-      <td>BAU</td>
-      <td>BAU</td>
-      <td>2050</td>
-      <td>Static</td>
-      <td>0.5000</td>
-      <td>BAU</td>
-      <td>apples</td>
-      <td>2013</td>
-      <td>273,533.2604</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>SSP1</td>
-      <td>BAU</td>
-      <td>BAU</td>
-      <td>2050</td>
-      <td>Static</td>
-      <td>0.5000</td>
-      <td>BAU</td>
-      <td>apples</td>
-      <td>2014</td>
-      <td>273,515.7308</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>3494395</th>
-      <td>SSP5</td>
-      <td>VGN</td>
-      <td>VGN</td>
-      <td>2100</td>
-      <td>Trend</td>
-      <td>1.0000</td>
-      <td>High</td>
-      <td>winter oilseeds</td>
-      <td>2096</td>
-      <td>5,238,019.6856</td>
-    </tr>
-    <tr>
-      <th>3494396</th>
-      <td>SSP5</td>
-      <td>VGN</td>
-      <td>VGN</td>
-      <td>2100</td>
-      <td>Trend</td>
-      <td>1.0000</td>
-      <td>High</td>
-      <td>winter oilseeds</td>
-      <td>2097</td>
-      <td>5,208,158.8774</td>
-    </tr>
-    <tr>
-      <th>3494397</th>
-      <td>SSP5</td>
-      <td>VGN</td>
-      <td>VGN</td>
-      <td>2100</td>
-      <td>Trend</td>
-      <td>1.0000</td>
-      <td>High</td>
-      <td>winter oilseeds</td>
-      <td>2098</td>
-      <td>5,177,607.6643</td>
-    </tr>
-    <tr>
-      <th>3494398</th>
-      <td>SSP5</td>
-      <td>VGN</td>
-      <td>VGN</td>
-      <td>2100</td>
-      <td>Trend</td>
-      <td>1.0000</td>
-      <td>High</td>
-      <td>winter oilseeds</td>
-      <td>2099</td>
-      <td>5,146,356.9056</td>
-    </tr>
-    <tr>
-      <th>3494399</th>
-      <td>SSP5</td>
-      <td>VGN</td>
-      <td>VGN</td>
-      <td>2100</td>
-      <td>Trend</td>
-      <td>1.0000</td>
-      <td>High</td>
-      <td>winter oilseeds</td>
-      <td>2100</td>
-      <td>5,114,397.3101</td>
-    </tr>
-  </tbody>
-</table>
-<p>3494400 rows × 10 columns</p>
-</div></div></div>
-</details>
+<a class="reference internal image-reference" href="_images/bd1f1c78d62bc6415676b011332da3b45e3787f698cbc214e91c4d9009ed85b6.png"><img alt="_images/bd1f1c78d62bc6415676b011332da3b45e3787f698cbc214e91c4d9009ed85b6.png" src="_images/bd1f1c78d62bc6415676b011332da3b45e3787f698cbc214e91c4d9009ed85b6.png" style="width: 800px; height: 500px;" /></a>
+</div>
 </div>
 </section>
 <section id="productivity">
@@ -7625,80 +7238,7 @@ document.write(`
 </tbody>
 </table>
 </div>
-<div class="cell tag_hide-cell docutils container">
-<details class="hide above-input">
-<summary aria-label="Toggle hidden content">
-<span class="collapsed">Show code cell content</span>
-<span class="expanded">Hide code cell content</span>
-</summary>
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># HIDDEN</span>
-
-<span class="c1"># Convert the `AGEC_CROPS` data to 2D xarray</span>
-<span class="n">agec_crops_xr</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">AGEC_CROPS</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
-    <span class="n">series</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">AGEC_CROPS</span><span class="p">[</span><span class="n">col</span><span class="p">]</span>
-    <span class="n">series_xr</span> <span class="o">=</span> <span class="n">arr_to_xr</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">series</span><span class="p">)</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">({</span>
-        <span class="s1">&#39;Type&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">col</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> 
-        <span class="s1">&#39;lm&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">col</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span> 
-        <span class="s1">&#39;lu&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">col</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span>
-    <span class="p">})</span>
-    <span class="n">agec_crops_xr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">series_xr</span><span class="p">)</span>
-
-<span class="c1"># Combine the xarray objects</span>
-<span class="n">agec_crops_xr</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">combine_by_coords</span><span class="p">(</span><span class="n">agec_crops_xr</span><span class="p">)</span>
-
-<span class="c1"># Get the data for the given land-use</span>
-<span class="n">agec_crops_xr_lu</span> <span class="o">=</span> <span class="n">agec_crops_xr</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lu</span><span class="o">=</span><span class="n">lu_desc</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</details>
-</div>
-<div class="cell tag_hide-cell docutils container">
-<details class="hide above-input">
-<summary aria-label="Toggle hidden content">
-<span class="collapsed">Show code cell content</span>
-<span class="expanded">Hide code cell content</span>
-</summary>
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># HIDDEN</span>
-
-<span class="c1"># Helper function to plot the quantity matrices</span>
-<span class="k">def</span> <span class="nf">plot_dry_irr</span><span class="p">(</span><span class="n">dry_irr</span><span class="p">,</span> <span class="n">irr_arr</span><span class="p">):</span>
-
-    <span class="c1"># Create a figure and a set of subplots with 1 row and 2 columns</span>
-    <span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mf">4.5</span><span class="p">))</span>
-
-    <span class="c1"># Plot the maps side by side</span>
-    <span class="n">dry_irr</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">vmin</span><span class="o">=</span><span class="n">dry_irr</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">vmax</span><span class="o">=</span><span class="n">dry_irr</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">)</span>
-    <span class="n">irr_arr</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">vmin</span><span class="o">=</span><span class="n">irr_arr</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">vmax</span><span class="o">=</span><span class="n">irr_arr</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">)</span>
-
-    <span class="c1"># Optionally, adjust the layout</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-</details>
-</div>
-<div class="cell tag_hide-input docutils container">
-<details class="hide above-input">
-<summary aria-label="Toggle hidden content">
-<span class="collapsed">Show code cell source</span>
-<span class="expanded">Hide code cell source</span>
-</summary>
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># HIDE CODE</span>
-
-<span class="c1"># Get the yield for the given land-use</span>
-<span class="n">p_dry</span> <span class="o">=</span> <span class="n">agec_crops_xr_lu</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">Type</span><span class="o">=</span><span class="s1">&#39;Yield&#39;</span><span class="p">,</span> <span class="n">lm</span><span class="o">=</span><span class="s1">&#39;dry&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">drop_vars</span><span class="p">(</span><span class="s1">&#39;spatial_ref&#39;</span><span class="p">)</span>
-<span class="n">p_irr</span> <span class="o">=</span> <span class="n">agec_crops_xr_lu</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">Type</span><span class="o">=</span><span class="s1">&#39;Yield&#39;</span><span class="p">,</span> <span class="n">lm</span><span class="o">=</span><span class="s1">&#39;irr&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">drop_vars</span><span class="p">(</span><span class="s1">&#39;spatial_ref&#39;</span><span class="p">)</span>
-
-<span class="n">plot_dry_irr</span><span class="p">(</span><span class="n">p_dry</span><span class="p">,</span> <span class="n">p_irr</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</details>
+<div class="cell tag_remove-input docutils container">
 <div class="cell_output docutils container">
 <img alt="_images/42f2c35e570aad933f2027e6be204f41f6a175dad993fb3e9242c20662a6e2bc.png" src="_images/42f2c35e570aad933f2027e6be204f41f6a175dad993fb3e9242c20662a6e2bc.png" />
 </div>
@@ -7706,92 +7246,12 @@ document.write(`
 </section>
 <section id="climate-change-impacts">
 <h2>Climate change impacts<a class="headerlink" href="#climate-change-impacts" title="Link to this heading">#</a></h2>
-<div class="cell tag_hide-cell docutils container">
-<details class="hide above-input">
-<summary aria-label="Toggle hidden content">
-<span class="collapsed">Show code cell content</span>
-<span class="expanded">Hide code cell content</span>
-</summary>
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># HIDDEN</span>
-
-<span class="c1"># Convert the `AGEC_CROPS` data to 2D xarray</span>
-<span class="n">cci_crops_xr</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">CLIMATE_CHANGE_IMPACT</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
-    <span class="n">series</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">CLIMATE_CHANGE_IMPACT</span><span class="p">[</span><span class="n">col</span><span class="p">]</span>
-    <span class="n">series_xr</span> <span class="o">=</span> <span class="n">arr_to_xr</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">series</span><span class="p">)</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">({</span>
-        <span class="s1">&#39;lm&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">col</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> 
-        <span class="s1">&#39;lu&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">col</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span> 
-        <span class="s1">&#39;year&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">col</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span>
-    <span class="p">})</span>
-    <span class="n">cci_crops_xr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">series_xr</span><span class="p">)</span>
-
-<span class="c1"># Combine the xarray objects</span>
-<span class="n">cci_crops_xr</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">combine_by_coords</span><span class="p">(</span><span class="n">cci_crops_xr</span><span class="p">)</span>
-
-
-<span class="c1"># Append ones as the climate change impact in year 2010</span>
-<span class="n">cci_ones_dry</span> <span class="o">=</span> <span class="n">cci_crops_xr</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lm</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;dry&#39;</span><span class="p">],</span> <span class="n">year</span><span class="o">=</span><span class="p">[</span><span class="mi">2020</span><span class="p">])</span>
-<span class="n">cci_ones_dry</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">cci_ones_dry</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
-<span class="n">cci_ones_dry</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="s1">&#39;year&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2010</span><span class="p">]</span>
-<span class="n">cci_ones_irr</span> <span class="o">=</span> <span class="n">cci_crops_xr</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lm</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;irr&#39;</span><span class="p">],</span> <span class="n">year</span><span class="o">=</span><span class="p">[</span><span class="mi">2020</span><span class="p">])</span>
-<span class="n">cci_ones_irr</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">cci_ones_irr</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
-<span class="n">cci_ones_irr</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="s1">&#39;year&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2010</span><span class="p">]</span>
-<span class="n">cci_crops_xr</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">combine_by_coords</span><span class="p">([</span><span class="n">cci_crops_xr</span><span class="p">,</span> <span class="n">cci_ones_dry</span><span class="p">,</span> <span class="n">cci_ones_irr</span><span class="p">])</span>
-
-
-<span class="c1"># Get the data for the given land-use</span>
-<span class="n">cci_crops_xr_lu</span> <span class="o">=</span> <span class="n">cci_crops_xr</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lu</span><span class="o">=</span><span class="n">lu_desc</span><span class="p">)</span>
-<span class="c1"># Linearly interpolate the data to 2010-2100</span>
-<span class="n">cci_crops_xr_lu</span> <span class="o">=</span> <span class="n">cci_crops_xr_lu</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">year</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="mi">2010</span><span class="p">,</span> <span class="mi">2101</span><span class="p">),</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;fill_value&quot;</span><span class="p">:</span> <span class="s2">&quot;extrapolate&quot;</span><span class="p">})</span>
-</pre></div>
-</div>
-</div>
-</details>
-</div>
-<div class="cell tag_hide-input docutils container">
-<details class="hide above-input">
-<summary aria-label="Toggle hidden content">
-<span class="collapsed">Show code cell source</span>
-<span class="expanded">Hide code cell source</span>
-</summary>
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># HIDE CODE</span>
-
-<span class="c1"># Get the data for the given year</span>
-<span class="n">cci_dry</span> <span class="o">=</span> <span class="n">cci_crops_xr_lu</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lm</span><span class="o">=</span><span class="s1">&#39;dry&#39;</span><span class="p">,</span> <span class="n">year</span><span class="o">=</span><span class="n">year_target</span><span class="p">)</span><span class="o">.</span><span class="n">drop_vars</span><span class="p">(</span><span class="s1">&#39;spatial_ref&#39;</span><span class="p">)</span>
-<span class="n">cci_irr</span> <span class="o">=</span> <span class="n">cci_crops_xr_lu</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lm</span><span class="o">=</span><span class="s1">&#39;irr&#39;</span><span class="p">,</span> <span class="n">year</span><span class="o">=</span><span class="n">year_target</span><span class="p">)</span><span class="o">.</span><span class="n">drop_vars</span><span class="p">(</span><span class="s1">&#39;spatial_ref&#39;</span><span class="p">)</span>
-
-<span class="n">plot_dry_irr</span><span class="p">(</span><span class="n">cci_dry</span><span class="p">,</span> <span class="n">cci_irr</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</details>
+<div class="cell tag_remove-input docutils container">
 <div class="cell_output docutils container">
 <img alt="_images/7f4f8062e53d1bca742bda17fbd77aa6b9850cfd0b18b77c0b90f24524f566b1.png" src="_images/7f4f8062e53d1bca742bda17fbd77aa6b9850cfd0b18b77c0b90f24524f566b1.png" />
 </div>
 </div>
-<div class="cell tag_hide-input docutils container">
-<details class="hide above-input">
-<summary aria-label="Toggle hidden content">
-<span class="collapsed">Show code cell source</span>
-<span class="expanded">Hide code cell source</span>
-</summary>
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># HIDE CODE</span>
-
-<span class="n">cci_crops_xr_lu_mean</span> <span class="o">=</span> <span class="p">(</span><span class="n">cci_crops_xr_lu</span> <span class="o">*</span> <span class="n">lu_mask</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">lu_mask</span> <span class="o">==</span> <span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span><span class="s1">&#39;y&#39;</span><span class="p">])</span> 
-<span class="n">cci_dry_mean</span> <span class="o">=</span> <span class="n">cci_crops_xr_lu_mean</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lm</span><span class="o">=</span><span class="s1">&#39;dry&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">drop_vars</span><span class="p">(</span><span class="s1">&#39;spatial_ref&#39;</span><span class="p">)</span>
-<span class="n">cci_irr_mean</span> <span class="o">=</span> <span class="n">cci_crops_xr_lu_mean</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lm</span><span class="o">=</span><span class="s1">&#39;irr&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">drop_vars</span><span class="p">(</span><span class="s1">&#39;spatial_ref&#39;</span><span class="p">)</span>
-
-
-<span class="n">cci_dry_mean</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
-<span class="n">cci_irr_mean</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s1">&#39;dry&#39;</span><span class="p">,</span> <span class="s1">&#39;irr&#39;</span><span class="p">])</span>
-</pre></div>
-</div>
-</div>
-</details>
+<div class="cell tag_remove-input docutils container">
 <div class="cell_output docutils container">
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x235082ea7e0&gt;
 </pre></div>
@@ -7802,80 +7262,14 @@ document.write(`
 </section>
 <section id="commodity-production">
 <h2>Commodity production<a class="headerlink" href="#commodity-production" title="Link to this heading">#</a></h2>
-<div class="cell tag_hide-cell docutils container">
-<details class="hide above-input">
-<summary aria-label="Toggle hidden content">
-<span class="collapsed">Show code cell content</span>
-<span class="expanded">Hide code cell content</span>
-</summary>
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># HIDDEN</span>
-
-<span class="n">mrp_xr</span> <span class="o">=</span><span class="p">[]</span>
-<span class="k">for</span> <span class="n">year</span> <span class="ow">in</span> <span class="p">[</span><span class="n">year_begin</span><span class="p">,</span> <span class="n">year_target</span><span class="p">]:</span>
-    <span class="n">yr_idx</span> <span class="o">=</span> <span class="n">year</span> <span class="o">-</span> <span class="n">year_begin</span>
-    <span class="c1"># Get the quantity matrices</span>
-    <span class="n">q_mrp</span> <span class="o">=</span> <span class="n">get_quantity_matrices</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">yr_idx</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>          <span class="c1"># t/cell</span>
-    <span class="n">q_mrp_xr</span> <span class="o">=</span> <span class="n">mrj_to_xr</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">q_mrp</span><span class="p">)</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">({</span><span class="s1">&#39;year&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">year</span><span class="p">]})</span>
-    <span class="n">mrp_xr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">q_mrp_xr</span><span class="p">)</span>
-    
-<span class="c1"># Combine the xarray objects</span>
-<span class="n">mrp_xr</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">combine_by_coords</span><span class="p">(</span><span class="n">mrp_xr</span><span class="p">)</span>                                       <span class="c1"># t/cell                        </span>
-</pre></div>
-</div>
-</div>
-</details>
-</div>
-<div class="cell tag_hide-input docutils container">
-<details class="hide above-input">
-<summary aria-label="Toggle hidden content">
-<span class="collapsed">Show code cell source</span>
-<span class="expanded">Hide code cell source</span>
-</summary>
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># HIDE CODE</span>
-
-<span class="c1"># Calculate the total quantity for each water supply</span>
-<span class="n">q_dry_begin</span> <span class="o">=</span> <span class="n">mrp_xr</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lm</span><span class="o">=</span><span class="s1">&#39;dry&#39;</span><span class="p">,</span> <span class="n">year</span><span class="o">=</span><span class="n">year_begin</span><span class="p">,</span> <span class="n">lu</span><span class="o">=</span><span class="n">lu_desc</span><span class="o">.</span><span class="n">upper</span><span class="p">())</span><span class="o">.</span><span class="n">drop_vars</span><span class="p">(</span><span class="s1">&#39;spatial_ref&#39;</span><span class="p">)</span>
-<span class="n">q_irr_begin</span> <span class="o">=</span> <span class="n">mrp_xr</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lm</span><span class="o">=</span><span class="s1">&#39;irr&#39;</span><span class="p">,</span> <span class="n">year</span><span class="o">=</span><span class="n">year_begin</span><span class="p">,</span> <span class="n">lu</span><span class="o">=</span><span class="n">lu_desc</span><span class="o">.</span><span class="n">upper</span><span class="p">())</span><span class="o">.</span><span class="n">drop_vars</span><span class="p">(</span><span class="s1">&#39;spatial_ref&#39;</span><span class="p">)</span>
-
-<span class="n">q_dry_total</span> <span class="o">=</span> <span class="n">lu_arr_dry</span><span class="o">.</span><span class="n">values</span> <span class="o">*</span> <span class="n">q_dry_begin</span><span class="o">.</span><span class="n">values</span>       
-<span class="n">q_dry_total</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">q_dry_total</span><span class="p">)</span> <span class="o">/</span> <span class="mf">1e6</span>          <span class="c1"># million t               </span>
-
-<span class="n">q_irr_total</span> <span class="o">=</span> <span class="n">lu_arr_irr</span><span class="o">.</span><span class="n">values</span> <span class="o">*</span> <span class="n">q_irr_begin</span><span class="o">.</span><span class="n">values</span>     
-<span class="n">q_irr_total</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">q_irr_total</span><span class="p">)</span> <span class="o">/</span> <span class="mf">1e6</span>          <span class="c1"># million t </span>
-
-<span class="c1"># Get the total quantity for the given land-use</span>
-<span class="n">q_total</span> <span class="o">=</span> <span class="n">q_dry_total</span> <span class="o">+</span> <span class="n">q_irr_total</span>                 <span class="c1"># million t       </span>
-
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Total quantity for </span><span class="si">{</span><span class="n">lu_desc</span><span class="si">}</span><span class="s1"> in </span><span class="si">{</span><span class="n">year_begin</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">q_total</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1"> million tonnes.&#39;</span><span class="p">)</span> 
-</pre></div>
-</div>
-</div>
-</details>
+<div class="cell tag_remove-input docutils container">
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Total quantity for Winter cereals in 2010: 41.27 million tonnes.
 </pre></div>
 </div>
 </div>
 </div>
-<div class="cell tag_hide-input docutils container">
-<details class="hide above-input">
-<summary aria-label="Toggle hidden content">
-<span class="collapsed">Show code cell source</span>
-<span class="expanded">Hide code cell source</span>
-</summary>
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># HIDE CODE</span>
-<span class="n">q_lu_target</span> <span class="o">=</span> <span class="n">mrp_xr</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">year</span><span class="o">=</span><span class="n">year_target</span><span class="p">,</span> <span class="n">lu</span><span class="o">=</span><span class="n">lu_desc</span><span class="o">.</span><span class="n">upper</span><span class="p">())</span> <span class="o">/</span> <span class="n">lu_area</span>  <span class="c1"># t/ha</span>
-
-<span class="n">q_dry_target</span> <span class="o">=</span> <span class="n">q_lu_target</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lm</span><span class="o">=</span><span class="s1">&#39;dry&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">drop_vars</span><span class="p">(</span><span class="s1">&#39;spatial_ref&#39;</span><span class="p">)</span>
-<span class="n">q_irr_target</span> <span class="o">=</span> <span class="n">q_lu_target</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lm</span><span class="o">=</span><span class="s1">&#39;irr&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">drop_vars</span><span class="p">(</span><span class="s1">&#39;spatial_ref&#39;</span><span class="p">)</span>
-<span class="n">plot_dry_irr</span><span class="p">(</span><span class="n">q_dry_target</span><span class="p">,</span> <span class="n">q_irr_target</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</details>
+<div class="cell tag_remove-input docutils container">
 <div class="cell_output docutils container">
 <img alt="_images/28b5cfccde818c8512a0e9b3fbdde04b084fa1da91da7913802b9bcf984dcad5.png" src="_images/28b5cfccde818c8512a0e9b3fbdde04b084fa1da91da7913802b9bcf984dcad5.png" />
 </div>
@@ -7883,39 +7277,7 @@ document.write(`
 </section>
 <section id="water-requirement">
 <h2>Water Requirement<a class="headerlink" href="#water-requirement" title="Link to this heading">#</a></h2>
-<div class="cell tag_hide-cell docutils container">
-<details class="hide above-input">
-<summary aria-label="Toggle hidden content">
-<span class="collapsed">Show code cell content</span>
-<span class="expanded">Hide code cell content</span>
-</summary>
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># HIDDEN</span>
-<span class="n">wr_mrj</span> <span class="o">=</span> <span class="n">get_wreq_matrices</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">year_target</span> <span class="o">-</span> <span class="n">year_begin</span><span class="p">)</span>           <span class="c1"># ML/cell</span>
-<span class="n">wr_mrj_xr</span> <span class="o">=</span> <span class="n">mrj_to_xr</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">wr_mrj</span><span class="p">)</span> <span class="o">/</span> <span class="n">lu_area</span> <span class="o">*</span> <span class="n">lu_mask</span>               <span class="c1"># ML/ha</span>
-
-<span class="n">wr_mrj_xr_lu</span> <span class="o">=</span> <span class="n">wr_mrj_xr</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lu</span><span class="o">=</span><span class="n">lu_desc</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</details>
-</div>
-<div class="cell tag_hide-input docutils container">
-<details class="hide above-input">
-<summary aria-label="Toggle hidden content">
-<span class="collapsed">Show code cell source</span>
-<span class="expanded">Hide code cell source</span>
-</summary>
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># HIDE CODE</span>
-<span class="n">wr_dry</span> <span class="o">=</span> <span class="n">wr_mrj_xr_lu</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lm</span><span class="o">=</span><span class="s1">&#39;dry&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">drop_vars</span><span class="p">(</span><span class="s1">&#39;spatial_ref&#39;</span><span class="p">)</span>
-<span class="n">wr_irr</span> <span class="o">=</span> <span class="n">wr_mrj_xr_lu</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lm</span><span class="o">=</span><span class="s1">&#39;irr&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">drop_vars</span><span class="p">(</span><span class="s1">&#39;spatial_ref&#39;</span><span class="p">)</span>
-
-<span class="n">plot_dry_irr</span><span class="p">(</span><span class="n">wr_dry</span><span class="p">,</span> <span class="n">wr_irr</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</details>
+<div class="cell tag_remove-input docutils container">
 <div class="cell_output docutils container">
 <img alt="_images/71e0da459bfa766a9ab252d4c326b99b10f079e0dd74ede52ab0ec10594d267b.png" src="_images/71e0da459bfa766a9ab252d4c326b99b10f079e0dd74ede52ab0ec10594d267b.png" />
 </div>
@@ -7923,76 +7285,7 @@ document.write(`
 </section>
 <section id="costs-and-revenues">
 <h2>Costs and Revenues<a class="headerlink" href="#costs-and-revenues" title="Link to this heading">#</a></h2>
-<div class="cell tag_hide-cell docutils container">
-<details class="hide above-input">
-<summary aria-label="Toggle hidden content">
-<span class="collapsed">Show code cell content</span>
-<span class="expanded">Hide code cell content</span>
-</summary>
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># HIDDEN</span>
-
-<span class="c1"># Area Cost, Fixed Depreciation Cost, Fixed Labour Cost, Fixed Operating Cost   </span>
-<span class="n">c_fix</span> <span class="o">=</span> <span class="n">agec_crops_xr_lu</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">Type</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;AC&#39;</span><span class="p">,</span> <span class="s1">&#39;FDC&#39;</span><span class="p">,</span> <span class="s1">&#39;FLC&#39;</span><span class="p">,</span> <span class="s1">&#39;FOC&#39;</span><span class="p">])</span>       <span class="c1"># $/ha</span>
-
-<span class="c1"># Quantity Cost</span>
-<span class="n">c_q</span> <span class="o">=</span> <span class="n">agec_crops_xr_lu</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">Type</span><span class="o">=</span><span class="s1">&#39;QC&#39;</span><span class="p">)</span> <span class="o">*</span> <span class="n">q_lu_target</span>                  <span class="c1"># $/ha</span>
-
-<span class="c1"># Water Cost</span>
-<span class="n">c_wr</span> <span class="o">=</span> <span class="n">agec_crops_xr_lu</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">Type</span><span class="o">=</span><span class="s1">&#39;WP&#39;</span><span class="p">)</span> <span class="o">*</span> <span class="n">wr_mrj_xr_lu</span>                <span class="c1"># $/ha          </span>
-
-<span class="c1"># Revenue</span>
-<span class="n">r</span> <span class="o">=</span> <span class="n">agec_crops_xr_lu</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">Type</span><span class="o">=</span><span class="s1">&#39;P1&#39;</span><span class="p">)</span> <span class="o">*</span> <span class="n">q_lu_target</span>                    <span class="c1"># $/ha   </span>
-
-
-<span class="c1">###########    Total Cost    ###########</span>
-<span class="n">c_total</span> <span class="o">=</span> <span class="n">c_fix</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="s1">&#39;Type&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="n">c_q</span> <span class="o">+</span> <span class="n">c_wr</span>                         <span class="c1"># $/ha  </span>
-</pre></div>
-</div>
-</div>
-</details>
-</div>
-<div class="cell tag_hide-input docutils container">
-<details class="hide above-input">
-<summary aria-label="Toggle hidden content">
-<span class="collapsed">Show code cell source</span>
-<span class="expanded">Hide code cell source</span>
-</summary>
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># HIDE CODE</span>
-
-<span class="n">c_arr</span> <span class="o">=</span> <span class="n">c_total</span>
-
-<span class="c1"># HIDDEN</span>
-<span class="n">c_dry</span> <span class="o">=</span> <span class="n">c_arr</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lm</span><span class="o">=</span><span class="s1">&#39;dry&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">drop_vars</span><span class="p">(</span><span class="s1">&#39;spatial_ref&#39;</span><span class="p">)</span>
-<span class="n">c_irr</span> <span class="o">=</span> <span class="n">c_arr</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lm</span><span class="o">=</span><span class="s1">&#39;irr&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">drop_vars</span><span class="p">(</span><span class="s1">&#39;spatial_ref&#39;</span><span class="p">)</span>
-
-<span class="n">plot_dry_irr</span><span class="p">(</span><span class="n">c_dry</span><span class="p">,</span> <span class="n">c_irr</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</details>
-<div class="cell_output docutils container">
-<img alt="_images/293c6c37a0319fbacdf2d747e797f2023760ffc25d1afb32bfa2a4c8246b6f64.png" src="_images/293c6c37a0319fbacdf2d747e797f2023760ffc25d1afb32bfa2a4c8246b6f64.png" />
-</div>
-</div>
-<div class="cell tag_hide-input docutils container">
-<details class="hide above-input">
-<summary aria-label="Toggle hidden content">
-<span class="collapsed">Show code cell source</span>
-<span class="expanded">Hide code cell source</span>
-</summary>
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># HIDE CODE</span>
-
-<span class="n">r_dry</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lm</span><span class="o">=</span><span class="s1">&#39;dry&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">drop_vars</span><span class="p">(</span><span class="s1">&#39;spatial_ref&#39;</span><span class="p">)</span>
-<span class="n">r_irr</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lm</span><span class="o">=</span><span class="s1">&#39;irr&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">drop_vars</span><span class="p">(</span><span class="s1">&#39;spatial_ref&#39;</span><span class="p">)</span>
-
-<span class="n">plot_dry_irr</span><span class="p">(</span><span class="n">r_dry</span><span class="p">,</span> <span class="n">r_irr</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</details>
+<div class="cell tag_remove-input docutils container">
 <div class="cell_output docutils container">
 <img alt="_images/e227c45954a69af71b32f797f4c2511055aa60d27bc3fe7b54a01a0c0ed3500d.png" src="_images/e227c45954a69af71b32f797f4c2511055aa60d27bc3fe7b54a01a0c0ed3500d.png" />
 </div>
@@ -8000,50 +7293,7 @@ document.write(`
 </section>
 <section id="ghg-emmisions">
 <h2>GHG emmisions<a class="headerlink" href="#ghg-emmisions" title="Link to this heading">#</a></h2>
-<div class="cell tag_hide-cell docutils container">
-<details class="hide above-input">
-<summary aria-label="Toggle hidden content">
-<span class="collapsed">Show code cell content</span>
-<span class="expanded">Hide code cell content</span>
-</summary>
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># HIDDEN</span>
-
-<span class="c1"># Convert the `AGEC_CROPS` data to 2D xarray</span>
-<span class="n">agghg_crops_xr</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">AGGHG_CROPS</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
-    <span class="n">series</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">AGGHG_CROPS</span><span class="p">[</span><span class="n">col</span><span class="p">]</span>
-    <span class="n">series_xr</span> <span class="o">=</span> <span class="n">arr_to_xr</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">series</span><span class="p">)</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">({</span>
-        <span class="s1">&#39;Type&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">col</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> 
-        <span class="s1">&#39;lm&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">col</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span> 
-        <span class="s1">&#39;lu&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">col</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span>
-    <span class="p">})</span>
-    <span class="n">agghg_crops_xr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">series_xr</span><span class="p">)</span>
-
-<span class="c1"># Combine the xarray objects</span>
-<span class="n">agghg_crops_xr</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">combine_by_coords</span><span class="p">(</span><span class="n">agghg_crops_xr</span><span class="p">)</span>            <span class="c1"># kg/ha</span>
-</pre></div>
-</div>
-</div>
-</details>
-</div>
-<div class="cell tag_hide-input docutils container">
-<details class="hide above-input">
-<summary aria-label="Toggle hidden content">
-<span class="collapsed">Show code cell source</span>
-<span class="expanded">Hide code cell source</span>
-</summary>
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># HIDE CODE</span>
-<span class="n">agghg_crops_xr_lu</span> <span class="o">=</span> <span class="n">agghg_crops_xr</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lu</span><span class="o">=</span><span class="n">lu_desc</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Type&#39;</span><span class="p">],</span> <span class="n">skipna</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>    <span class="c1"># kg/ha</span>
-<span class="n">ghg_dry</span> <span class="o">=</span> <span class="n">agghg_crops_xr_lu</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lm</span><span class="o">=</span><span class="s1">&#39;dry&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">drop_vars</span><span class="p">(</span><span class="s1">&#39;spatial_ref&#39;</span><span class="p">)</span> 
-<span class="n">ghg_irr</span> <span class="o">=</span> <span class="n">agghg_crops_xr_lu</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lm</span><span class="o">=</span><span class="s1">&#39;irr&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">drop_vars</span><span class="p">(</span><span class="s1">&#39;spatial_ref&#39;</span><span class="p">)</span> 
-
-<span class="n">plot_dry_irr</span><span class="p">(</span><span class="n">ghg_dry</span><span class="p">,</span> <span class="n">ghg_irr</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</details>
+<div class="cell tag_remove-input docutils container">
 <div class="cell_output docutils container">
 <img alt="_images/6d6468b2e6880961498ad7e7ff7db1ec104c726af78376e551fbfd6ec9b91424.png" src="_images/6d6468b2e6880961498ad7e7ff7db1ec104c726af78376e551fbfd6ec9b91424.png" />
 </div>
@@ -8051,231 +7301,12 @@ document.write(`
 </section>
 <section id="find-the-optimized-solution">
 <h2>Find the optimized solution<a class="headerlink" href="#find-the-optimized-solution" title="Link to this heading">#</a></h2>
-<div class="cell tag_hide-cell docutils container">
-<details class="hide above-input">
-<summary aria-label="Toggle hidden content">
-<span class="collapsed">Show code cell content</span>
-<span class="expanded">Hide code cell content</span>
-</summary>
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># HIDDEN</span>
-
-<span class="c1"># Get the available land for the given land-use</span>
-<span class="n">lu_arr_dry_aval</span> <span class="o">=</span> <span class="p">(</span><span class="n">lu_arr_dry</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">lu_arr_irr</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">q_dry_target</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
-<span class="n">lu_arr_irr_aval</span> <span class="o">=</span> <span class="p">(</span><span class="n">lu_arr_irr</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">lu_arr_dry</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">q_irr_target</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</details>
-</div>
-<div class="cell tag_hide-cell docutils container">
-<details class="hide above-input">
-<summary aria-label="Toggle hidden content">
-<span class="collapsed">Show code cell content</span>
-<span class="expanded">Hide code cell content</span>
-</summary>
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># HIDDEN</span>
-
-<span class="k">def</span> <span class="nf">rand_reduce_gap</span><span class="p">(</span><span class="n">in_dry</span><span class="p">,</span> <span class="n">in_irr</span><span class="p">,</span> <span class="n">q_dry</span><span class="p">,</span> <span class="n">q_irr</span><span class="p">,</span> <span class="n">gap</span><span class="p">,</span> <span class="n">chunk_size</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
-
-    <span class="c1"># Get the row/col for the non-zero values</span>
-    <span class="n">row_dry</span><span class="p">,</span> <span class="n">col_dry</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">in_dry</span><span class="p">)</span>
-    <span class="n">row_irr</span><span class="p">,</span> <span class="n">col_irr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">in_irr</span><span class="p">)</span>
-
-    <span class="c1"># Get the index for the non-zero values</span>
-    <span class="n">idx_dry</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">row_dry</span><span class="p">)))</span>
-    <span class="n">idx_irr</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">row_irr</span><span class="p">)))</span>
-    
-    <span class="c1"># Initialize the selected index</span>
-    <span class="n">sel_idx_dry</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">sel_idx_irr</span> <span class="o">=</span> <span class="p">[]</span>
-    
-    <span class="c1"># Loop until the gap is closed</span>
-    <span class="k">while</span> <span class="n">gap</span><span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">idx_dry</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">chunk_size</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">idx_irr</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">chunk_size</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Not enought land for the meeting the production gap.&#39;</span><span class="p">)</span>
-            <span class="k">break</span>
-        
-        <span class="n">sel_dry</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">idx_dry</span><span class="p">,</span> <span class="n">chunk_size</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="n">sel_irr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">idx_irr</span><span class="p">,</span> <span class="n">chunk_size</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        
-        <span class="p">[</span><span class="n">idx_dry</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">sel_dry</span><span class="p">]</span>
-        <span class="p">[</span><span class="n">idx_irr</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">sel_irr</span><span class="p">]</span>
-        
-        <span class="n">sel_idx_dry</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">sel_dry</span><span class="p">)</span>
-        <span class="n">sel_idx_irr</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">sel_irr</span><span class="p">)</span>
-        
-        <span class="n">gap</span> <span class="o">-=</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">q_dry</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">row_dry</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">sel_dry</span><span class="p">],</span> <span class="n">col_dry</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">sel_dry</span><span class="p">]])</span>
-        <span class="n">gap</span> <span class="o">-=</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">q_irr</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">row_irr</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">sel_irr</span><span class="p">],</span> <span class="n">col_irr</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">sel_irr</span><span class="p">]])</span>
-        
-    <span class="c1"># Get the pred array</span>
-    <span class="n">pred_arr_dry</span> <span class="o">=</span> <span class="n">lu_arr_dry</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-    <span class="n">pred_arr_irr</span> <span class="o">=</span> <span class="n">lu_arr_irr</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-    
-    <span class="n">pred_arr_dry</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">row_dry</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">sel_idx_dry</span><span class="p">],</span> <span class="n">col_dry</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">sel_idx_dry</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">2</span>
-    <span class="n">pred_arr_irr</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">row_irr</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">sel_idx_irr</span><span class="p">],</span> <span class="n">col_irr</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">sel_idx_irr</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">2</span>
-           
-    <span class="k">return</span> <span class="n">pred_arr_dry</span><span class="p">,</span> <span class="n">pred_arr_irr</span>
-</pre></div>
-</div>
-</div>
-</details>
-</div>
-<div class="cell tag_hide-cell docutils container">
-<details class="hide above-input">
-<summary aria-label="Toggle hidden content">
-<span class="collapsed">Show code cell content</span>
-<span class="expanded">Hide code cell content</span>
-</summary>
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># HIDDEN</span>
-
-<span class="c1"># Randomly select from available land to meet the production gap</span>
-<span class="kn">from</span> <span class="nn">joblib</span> <span class="kn">import</span> <span class="n">Parallel</span><span class="p">,</span> <span class="n">delayed</span> 
-<span class="kn">from</span> <span class="nn">tqdm.auto</span> <span class="kn">import</span> <span class="n">tqdm</span>  
-
-<span class="n">n_runs</span> <span class="o">=</span> <span class="mi">100</span>     
-
-<span class="n">gap</span> <span class="o">=</span> <span class="p">(</span><span class="n">demand_vol</span> <span class="o">-</span> <span class="n">q_total</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1e6</span>              <span class="c1"># tonnes</span>
-<span class="n">q_dry_cell</span> <span class="o">=</span> <span class="n">q_dry_target</span> <span class="o">*</span> <span class="n">lu_area</span>             <span class="c1"># t/cell</span>
-<span class="n">q_irr_cell</span> <span class="o">=</span> <span class="n">q_irr_target</span> <span class="o">*</span> <span class="n">lu_area</span>             <span class="c1"># t/cell</span>
-
-<span class="n">para_obj</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">return_as</span><span class="o">=</span><span class="s1">&#39;generator&#39;</span><span class="p">)</span>
-<span class="n">tasks</span> <span class="o">=</span> <span class="p">(</span><span class="n">delayed</span><span class="p">(</span><span class="n">rand_reduce_gap</span><span class="p">)(</span><span class="n">lu_arr_dry_aval</span><span class="p">,</span> <span class="n">lu_arr_irr_aval</span><span class="p">,</span> <span class="n">q_dry_cell</span><span class="p">,</span> <span class="n">q_irr_cell</span><span class="p">,</span> <span class="n">gap</span><span class="p">,</span> <span class="n">chunk_size</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_runs</span><span class="p">))</span>
-<span class="n">results</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">para_obj</span><span class="p">(</span><span class="n">tasks</span><span class="p">),</span> <span class="n">total</span><span class="o">=</span><span class="n">n_runs</span><span class="p">)]</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "fc2ed9efe9fd480884b2cfc40a35198c", "version_major": 2, "version_minor": 0}</script></div>
-</details>
-</div>
-<div class="cell tag_hide-cell docutils container">
-<details class="hide above-input">
-<summary aria-label="Toggle hidden content">
-<span class="collapsed">Show code cell content</span>
-<span class="expanded">Hide code cell content</span>
-</summary>
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># HIDDEN</span>
-
-<span class="c1"># Combine all results to one xarray object</span>
-<span class="n">pred_arr_xr</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">arr</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">results</span><span class="p">):</span>
-    <span class="n">dry_arr</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">({</span><span class="s1">&#39;run&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="s1">&#39;lm&#39;</span><span class="p">:[</span><span class="s1">&#39;dry&#39;</span><span class="p">]},)</span>
-    <span class="n">irr_arr</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">({</span><span class="s1">&#39;run&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="s1">&#39;lm&#39;</span><span class="p">:[</span><span class="s1">&#39;irr&#39;</span><span class="p">]},)</span>
-    <span class="n">pred_arr_xr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dry_arr</span><span class="p">)</span>
-    <span class="n">pred_arr_xr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">irr_arr</span><span class="p">)</span>
-
-<span class="c1"># Combine the xarray objects</span>
-<span class="n">pred_arr_xr</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">combine_by_coords</span><span class="p">(</span><span class="n">pred_arr_xr</span><span class="p">)</span>   
-</pre></div>
-</div>
-</div>
-</details>
-</div>
-<div class="cell tag_hide-cell docutils container">
-<details class="hide above-input">
-<summary aria-label="Toggle hidden content">
-<span class="collapsed">Show code cell content</span>
-<span class="expanded">Hide code cell content</span>
-</summary>
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># HIDDEN</span>
-
-<span class="n">c_pred_xr</span> <span class="o">=</span> <span class="n">c_total</span> <span class="o">*</span> <span class="n">lu_area</span> <span class="o">*</span> <span class="n">pred_arr_xr</span>
-<span class="n">c_pred_xr_sum</span> <span class="o">=</span> <span class="n">c_pred_xr</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;lm&#39;</span><span class="p">,</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="mf">1e9</span>        <span class="c1"># billion $</span>
-
-<span class="n">r_pred_xr</span> <span class="o">=</span> <span class="n">r</span> <span class="o">*</span> <span class="n">lu_area</span> <span class="o">*</span> <span class="n">pred_arr_xr</span>
-<span class="n">r_pred_xr_sum</span> <span class="o">=</span> <span class="n">r_pred_xr</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;lm&#39;</span><span class="p">,</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="mf">1e9</span>        <span class="c1"># billion $</span>
-
-<span class="n">wr_pred_xr</span> <span class="o">=</span> <span class="n">wr_mrj_xr_lu</span> <span class="o">*</span> <span class="n">lu_area</span> <span class="o">*</span> <span class="n">pred_arr_xr</span>               
-<span class="n">wr_pred_xr_sum</span> <span class="o">=</span> <span class="n">wr_pred_xr</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;lm&#39;</span><span class="p">,</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="mf">1e6</span>      <span class="c1"># million ML</span>
-
-<span class="n">ghg_pred_xr</span> <span class="o">=</span> <span class="n">agghg_crops_xr_lu</span> <span class="o">*</span> <span class="n">lu_area</span> <span class="o">*</span> <span class="n">pred_arr_xr</span>         
-<span class="n">ghg_pred_xr_sum</span> <span class="o">=</span> <span class="n">ghg_pred_xr</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;lm&#39;</span><span class="p">,</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="mf">1e9</span>    <span class="c1"># million t</span>
-</pre></div>
-</div>
-</div>
-</details>
-</div>
-<div class="cell tag_hide-input docutils container">
-<details class="hide above-input">
-<summary aria-label="Toggle hidden content">
-<span class="collapsed">Show code cell source</span>
-<span class="expanded">Hide code cell source</span>
-</summary>
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># HIDE CODE</span>
-
-<span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
-<span class="n">axs</span> <span class="o">=</span> <span class="n">axs</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
-
-
-<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Frequency&#39;</span><span class="p">)</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">c_pred_xr_sum</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Cost (billion AU$)&#39;</span><span class="p">)</span>
-
-<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">r_pred_xr_sum</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Revenue (billion AU$)&#39;</span><span class="p">)</span>
-
-<span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Frequency&#39;</span><span class="p">)</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">wr_pred_xr_sum</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Water (million ML)&#39;</span><span class="p">)</span>
-
-<span class="n">axs</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">ghg_pred_xr_sum</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;GHG (million tonnes)&#39;</span><span class="p">)</span>
-
-
-<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-</details>
+<div class="cell tag_remove-input docutils container">
 <div class="cell_output docutils container">
 <img alt="_images/0330711d4535e2d5fad32ed62965ed28500aeaa8fced84146fbd291808509d22.png" src="_images/0330711d4535e2d5fad32ed62965ed28500aeaa8fced84146fbd291808509d22.png" />
 </div>
 </div>
-<div class="cell tag_hide-cell docutils container">
-<details class="hide above-input">
-<summary aria-label="Toggle hidden content">
-<span class="collapsed">Show code cell content</span>
-<span class="expanded">Hide code cell content</span>
-</summary>
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># HIDDEN</span>
-
-<span class="c1"># Set abitrairy water and GHG limits</span>
-<span class="n">ghg_lmt</span> <span class="o">=</span> <span class="mf">18.8</span>           <span class="c1"># million tonnes</span>
-<span class="n">water_lmt</span> <span class="o">=</span> <span class="mi">15</span>           <span class="c1"># million ML</span>
-
-<span class="n">runs_lmt</span> <span class="o">=</span> <span class="p">(</span><span class="n">ghg_pred_xr_sum</span> <span class="o">&lt;</span> <span class="n">ghg_lmt</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">wr_pred_xr_sum</span> <span class="o">&lt;</span> <span class="n">water_lmt</span><span class="p">)</span>
-<span class="n">runs_idx</span> <span class="o">=</span> <span class="n">ghg_pred_xr_sum</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="s1">&#39;run&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">runs_lmt</span><span class="o">.</span><span class="n">values</span><span class="p">]</span>
-</pre></div>
-</div>
-</div>
-</details>
-</div>
-<div class="cell tag_hide-input docutils container">
-<details class="hide above-input">
-<summary aria-label="Toggle hidden content">
-<span class="collapsed">Show code cell source</span>
-<span class="expanded">Hide code cell source</span>
-</summary>
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># HIDE CODE</span>
-
-<span class="n">c_df</span> <span class="o">=</span> <span class="n">c_pred_xr_sum</span><span class="p">[</span><span class="n">runs_idx</span><span class="p">]</span><span class="o">.</span><span class="n">to_dataframe</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Cost_billion_AUD&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
-<span class="n">r_df</span> <span class="o">=</span> <span class="n">r_pred_xr_sum</span><span class="p">[</span><span class="n">runs_idx</span><span class="p">]</span><span class="o">.</span><span class="n">to_dataframe</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Revenue_billion_AUD&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
-
-<span class="n">c_r_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">c_df</span><span class="p">,</span> <span class="n">r_df</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;run&#39;</span><span class="p">],</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;inner&#39;</span><span class="p">)[[</span><span class="s1">&#39;run&#39;</span><span class="p">,</span> <span class="s1">&#39;Cost_billion_AUD&#39;</span><span class="p">,</span> <span class="s1">&#39;Revenue_billion_AUD&#39;</span><span class="p">]]</span>
-<span class="n">c_r_df</span><span class="p">[</span><span class="s1">&#39;Profit_billion_AUD&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">c_r_df</span><span class="p">[</span><span class="s1">&#39;Revenue_billion_AUD&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">c_r_df</span><span class="p">[</span><span class="s1">&#39;Cost_billion_AUD&#39;</span><span class="p">]</span>
-<span class="n">c_r_df</span>
-</pre></div>
-</div>
-</div>
-</details>
+<div class="cell tag_remove-input docutils container">
 <div class="cell_output docutils container">
 <div class="output text_html"><div>
 <style scoped>
@@ -8383,26 +7414,7 @@ document.write(`
 </table>
 </div></div></div>
 </div>
-<div class="cell tag_hide-input docutils container">
-<details class="hide above-input">
-<summary aria-label="Toggle hidden content">
-<span class="collapsed">Show code cell source</span>
-<span class="expanded">Hide code cell source</span>
-</summary>
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># HIDE CODE</span>
-
-<span class="n">c_min_idx</span> <span class="o">=</span> <span class="n">c_r_df</span><span class="p">[</span><span class="s1">&#39;Cost_billion_AUD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">argmin</span><span class="p">()</span>
-<span class="n">c_min_run</span> <span class="o">=</span> <span class="n">c_r_df</span><span class="p">[</span><span class="s1">&#39;run&#39;</span><span class="p">][</span><span class="n">c_min_idx</span><span class="p">]</span>
-
-<span class="n">p_max_idx</span> <span class="o">=</span> <span class="n">c_r_df</span><span class="p">[</span><span class="s1">&#39;Profit_billion_AUD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">argmax</span><span class="p">()</span>
-<span class="n">p_max_run</span> <span class="o">=</span> <span class="n">c_r_df</span><span class="p">[</span><span class="s1">&#39;run&#39;</span><span class="p">][</span><span class="n">p_max_idx</span><span class="p">]</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;The run with the minimum cost is </span><span class="si">{</span><span class="n">c_min_run</span><span class="si">}</span><span class="s1">.</span><span class="se">\n</span><span class="s1">The run with the maximum profit is </span><span class="si">{</span><span class="n">p_max_run</span><span class="si">}</span><span class="s1">.&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</details>
+<div class="cell tag_remove-input docutils container">
 <div class="cell_output docutils container">
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
 <span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
@@ -8416,46 +7428,12 @@ document.write(`
 </div>
 </div>
 </div>
-<div class="cell tag_hide-input docutils container">
-<details class="hide above-input">
-<summary aria-label="Toggle hidden content">
-<span class="collapsed">Show code cell source</span>
-<span class="expanded">Hide code cell source</span>
-</summary>
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># HIDE CODE</span>
-
-<span class="n">pred_min_c</span> <span class="o">=</span> <span class="n">pred_arr_xr</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">run</span><span class="o">=</span><span class="n">c_min_run</span><span class="p">)</span>
-<span class="n">pred_min_c_dry</span> <span class="o">=</span> <span class="n">pred_min_c</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lm</span><span class="o">=</span><span class="s1">&#39;dry&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">drop_vars</span><span class="p">(</span><span class="s1">&#39;spatial_ref&#39;</span><span class="p">)</span>
-<span class="n">pred_min_c_irr</span> <span class="o">=</span> <span class="n">pred_min_c</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lm</span><span class="o">=</span><span class="s1">&#39;irr&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">drop_vars</span><span class="p">(</span><span class="s1">&#39;spatial_ref&#39;</span><span class="p">)</span>
-
-<span class="n">plot_dry_irr</span><span class="p">(</span><span class="n">pred_min_c_dry</span><span class="p">,</span> <span class="n">pred_min_c_irr</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</details>
+<div class="cell tag_remove-input docutils container">
 <div class="cell_output docutils container">
 <img alt="_images/4d36f7b837d068e4da58d473f7cc878322b9b9a8395ff33dc50442fe09376702.png" src="_images/4d36f7b837d068e4da58d473f7cc878322b9b9a8395ff33dc50442fe09376702.png" />
 </div>
 </div>
-<div class="cell tag_hide-input docutils container">
-<details class="hide above-input">
-<summary aria-label="Toggle hidden content">
-<span class="collapsed">Show code cell source</span>
-<span class="expanded">Hide code cell source</span>
-</summary>
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># HIDE CODE</span>
-
-<span class="n">pred_max_p</span> <span class="o">=</span> <span class="n">pred_arr_xr</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">run</span><span class="o">=</span><span class="n">p_max_run</span><span class="p">)</span>
-<span class="n">pred_max_p_dry</span> <span class="o">=</span> <span class="n">pred_max_p</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lm</span><span class="o">=</span><span class="s1">&#39;dry&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">drop_vars</span><span class="p">(</span><span class="s1">&#39;spatial_ref&#39;</span><span class="p">)</span>
-<span class="n">pred_max_p_irr</span> <span class="o">=</span> <span class="n">pred_max_p</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lm</span><span class="o">=</span><span class="s1">&#39;irr&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">drop_vars</span><span class="p">(</span><span class="s1">&#39;spatial_ref&#39;</span><span class="p">)</span>
-
-<span class="n">plot_dry_irr</span><span class="p">(</span><span class="n">pred_max_p_dry</span><span class="p">,</span> <span class="n">pred_max_p_irr</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</details>
+<div class="cell tag_remove-input docutils container">
 <div class="cell_output docutils container">
 <img alt="_images/5aee8014b1d2114e21ee8b5f7f489d84d42e47c6d5b4012b613e1f8b2c5ef54f.png" src="_images/5aee8014b1d2114e21ee8b5f7f489d84d42e47c6d5b4012b613e1f8b2c5ef54f.png" />
 </div>
@@ -8542,7 +7520,7 @@ By Jinzhu WANG, Hossein Aghighi, and Brett A. Bryan
 
   <p class="copyright">
     
-      © Copyright 2023.
+      © Copyright 2024.
       <br/>
     
   </p>
