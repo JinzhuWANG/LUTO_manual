@@ -2,8 +2,8 @@
 # Learn more at https://jupyterbook.org/customize/config.html
 
 title: LUTO User Manual
-author: Jinzhu WANMG, Hossein Aghighi, and Brett A. Bryan 
-logo: logo.webp
+author: Jinzhu WANG, Hossein Aghighi, and Brett A. Bryan 
+logo: logo.jpg
 
 # Force re-execution of notebooks on each build.
 # See https://jupyterbook.org/content/execute.html
