@@ -32,7 +32,7 @@
     <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=a3416100" />
     <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
   
@@ -369,9 +369,14 @@ document.write(`
 <p>LUTO-2 is capable of running land-use change for Australia at a ~1x1 square kilometer scale, but this chapter will use a setting that specifies <code class="docutils literal notranslate"><span class="pre">RESFACTOR=5</span></code> to reduce processing time. Essentially, this resfactor means we are only using the centroid cell out of each 5*5 square matrix to run the model.</p>
 </div>
 <p>Here we run LUTO-2 model to get necessary data variables for illustrating how the model works. LUTO converts all input data into <code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> for every processing, but in the manual we use <code class="docutils literal notranslate"><span class="pre">xarray.DataArray</span></code> for more easier data manupilation. The main advantage of <code class="docutils literal notranslate"><span class="pre">xarray</span></code> over <code class="docutils literal notranslate"><span class="pre">numpy</span></code> is that it can lable high-dimension array (usually being called as a ‘Tensor’ or ‘nd-Matrices’) with sensible names.</p>
-<div class="cell docutils container">
+<div class="cell tag_hide-cell docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell content</span>
+<span class="expanded">Hide code cell content</span>
+</summary>
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># HIDE CODE</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># HIDDEN</span>
 
 <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">Here are the code to run LUTO first, so that we can have the variables and objects required for illustration in the notebook.</span>
@@ -408,6 +413,7 @@ document.write(`
 </pre></div>
 </div>
 </div>
+</details>
 </div>
 <p>Before get our head into the amazing LUTO world, please keep in mind that this manual tris to explain how LUTO works in the most intuitive way. That means sometime we may loss technical depth or skip over certain complexities. If you are keen to understand how exactly this model works, we encourage you to look at the source code and  and delve into the tech/data manul provided under the <code class="docutils literal notranslate"><span class="pre">/docs</span></code>.</p>
 <section id="national-land-use-map-of-australia-for-2010">
@@ -502,9 +508,14 @@ document.write(`
 </table>
 </div>
 <p>It is overwhelming to consider all 28 agricultural land-use for illustration. Instead, let’s only map the sptail distribution of <code class="docutils literal notranslate"><span class="pre">Winter</span> <span class="pre">cereals</span></code> under minimized-cost/maximized-profit drives given various constraints. Referring to table above, we know that the code of 25 is winter cereal. We will use this value to extract the map of winter cereal.</p>
-<div class="cell docutils container">
+<div class="cell tag_hide-cell docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell content</span>
+<span class="expanded">Hide code cell content</span>
+</summary>
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># HIDE CODE</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># HIDDEN</span>
 
 <span class="c1"># Define year, lu_code</span>
 <span class="n">year_begin</span> <span class="o">=</span> <span class="mi">2010</span>
@@ -548,10 +559,16 @@ document.write(`
 </pre></div>
 </div>
 </div>
+</details>
 </div>
 <p>It is important to acknowledge that the same land-use under different water supply management (<code class="docutils literal notranslate"><span class="pre">dry</span></code> or <code class="docutils literal notranslate"><span class="pre">irrigated</span></code>) requires significantly different water consumption and economic investment, which ultimately leads to very different yields. To account for this, LUTO-2 introduces a dry/irrigation map that further classifies agricultural land-use into dry land or irrigated land. In this manual, we will split winter cereals into their corresponding dry and irrigated parts. Additionally, input data such as ‘water requirement,’ ‘GHG release,’ and ‘cost’ are provided with a water supply attribution.</p>
 <p>If you have a pair of eagle eyes, you can find that only a very small number of irradiated winter cereal cells are scattered in Victoria.</p>
-<div class="cell docutils container">
+<div class="cell tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># HIDE CODE</span>
 
@@ -587,6 +604,7 @@ document.write(`
 </pre></div>
 </div>
 </div>
+</details>
 <div class="cell_output docutils container">
 <img alt="_images/852fcc4126a1925407ec28f31173d0e76a73e8d95f7f1b250974a307fd53389b.png" src="_images/852fcc4126a1925407ec28f31173d0e76a73e8d95f7f1b250974a307fd53389b.png" />
 </div>
@@ -596,13 +614,19 @@ document.write(`
 <section id="demand">
 <h2>Demand<a class="headerlink" href="#demand" title="Link to this heading">#</a></h2>
 <p>As an agricultural model, the first target to meet is the food demand. The demand data (tones) is a <code class="docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code> lives in the <code class="docutils literal notranslate"><span class="pre">data.DEMAND_DATA</span></code> variable. We can see that the index of the demand dataframe is commodities, the column is a 2-level column that represents demand compositions and years.</p>
-<div class="cell docutils container">
+<div class="cell tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># HIDE CODE</span>
 <span class="n">data</span><span class="o">.</span><span class="n">DEMAND_DATA</span>
 </pre></div>
 </div>
 </div>
+</details>
 <div class="cell_output docutils container">
 <div class="output text_html"><div>
 <style scoped>
@@ -7223,7 +7247,12 @@ document.write(`
 </table>
 </div>
 <p>The reason for “why 2 more commodities” is that there are two land uses (unallocated land) that do not produce any commodities, and 4 commodities (aquculture, chicken, egg, and pork) cannot be produced from any land use. The math is simple, but it leads to another problem: If there are 4 additional commodities that cannot be produced by any land use, how can LUTO meet these demands by rearranging land use distributions? The answer is that LUTO assumes that the demand for these 4 commodities will be met in the target year, and LUTO arranges land-use to mitigate their environmental impacts. For example, to meet the demand for eggs in 2030, a total of 500 kt of GHG were emitted. LUTO will then try to plant more trees to sequestrate these carbons. In this way, LUTO considers both on-land (commodities produced directly from land) and off-land (commodities produced from cages or factories) commodities, making itself a more complete agricutural model.</p>
-<div class="cell docutils container">
+<div class="cell tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># HIDE CODE</span>
 
@@ -7248,12 +7277,18 @@ document.write(`
 </pre></div>
 </div>
 </div>
+</details>
 <div class="cell_output docutils container">
 <a class="reference internal image-reference" href="_images/df966475254fa1a754d85d87f95b43069c03bd8c0ec16da0ddacc55311825876.png"><img alt="_images/df966475254fa1a754d85d87f95b43069c03bd8c0ec16da0ddacc55311825876.png" src="_images/df966475254fa1a754d85d87f95b43069c03bd8c0ec16da0ddacc55311825876.png" style="width: 640px; height: 480px;" /></a>
 </div>
 </div>
 <p>Now we can simply query the demand data for year 2050 and we will get target to meet.</p>
-<div class="cell docutils container">
+<div class="cell tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># HIDE CODE</span>
 <span class="c1"># Get the demand for the target year</span>
@@ -7263,6 +7298,7 @@ document.write(`
 </pre></div>
 </div>
 </div>
+</details>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The demand for Winter cereals in 2050 is 77.31 million tonnes.
 </pre></div>
@@ -7271,7 +7307,7 @@ document.write(`
 </div>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
-<p>Diets, exports, and the economy will change the demand for food, so it is a good idea that the demand data can reflect these factors. Luckily, LUTO has indeed provided us with some switches to choose the scenario we are interested. For example, if we want to use the demand that halved waste, we just need to change the <code class="docutils literal notranslate"><span class="pre">WASTE</span></code> parameter in <code class="docutils literal notranslate"><span class="pre">luto.settings</span></code> to <code class="docutils literal notranslate"><span class="pre">0.5</span></code>.</p>
+<p>Diets, exports, and the economy will change the demand for food, so it is a good to consider these factors. Luckily, LUTO has provided us with some switches to choose the scenario we are interested. For example, if we want to use the demand with halved food waste, we just need to change the <code class="docutils literal notranslate"><span class="pre">WASTE</span></code> parameter in <code class="docutils literal notranslate"><span class="pre">luto.settings</span></code> to <code class="docutils literal notranslate"><span class="pre">0.5</span></code>.</p>
 </div>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
@@ -7312,9 +7348,14 @@ document.write(`
 </tbody>
 </table>
 </div>
-<div class="cell docutils container">
+<div class="cell tag_hide-cell docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell content</span>
+<span class="expanded">Hide code cell content</span>
+</summary>
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># HIDE CODE</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># HIDDEN</span>
 <span class="n">dd</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_hdf</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;input&#39;</span><span class="p">,</span> <span class="s1">&#39;demand_projections.h5&#39;</span><span class="p">)</span> <span class="p">)</span>
 <span class="n">dd_long</span> <span class="o">=</span> <span class="n">dd</span><span class="p">[</span><span class="s1">&#39;PRODUCTION&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">stack</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="s1">&#39;DEMAND_TONNES&#39;</span><span class="p">})</span>
 <span class="n">dd_long</span>
@@ -7500,6 +7541,7 @@ document.write(`
 </table>
 <p>3494400 rows × 10 columns</p>
 </div></div></div>
+</details>
 </div>
 </section>
 <section id="productivity">
@@ -7753,9 +7795,14 @@ document.write(`
 </section>
 <section id="commodity-production">
 <h2>Commodity production<a class="headerlink" href="#commodity-production" title="Link to this heading">#</a></h2>
-<div class="cell docutils container">
+<div class="cell tag_hide-cell docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell content</span>
+<span class="expanded">Hide code cell content</span>
+</summary>
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># HIDE CODE</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># HIDDEN</span>
 
 <span class="n">mrp_xr</span> <span class="o">=</span><span class="p">[]</span>
 <span class="k">for</span> <span class="n">year</span> <span class="ow">in</span> <span class="p">[</span><span class="n">year_begin</span><span class="p">,</span> <span class="n">year_target</span><span class="p">]:</span>
@@ -7770,6 +7817,7 @@ document.write(`
 </pre></div>
 </div>
 </div>
+</details>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -7796,9 +7844,14 @@ document.write(`
 </div>
 </div>
 </div>
-<div class="cell docutils container">
+<div class="cell tag_hide-cell docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell content</span>
+<span class="expanded">Hide code cell content</span>
+</summary>
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># HIDE CODE</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># HIDDEN</span>
 <span class="n">q_lu_target</span> <span class="o">=</span> <span class="n">mrp_xr</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">year</span><span class="o">=</span><span class="n">year_target</span><span class="p">,</span> <span class="n">lu</span><span class="o">=</span><span class="n">lu_desc</span><span class="o">.</span><span class="n">upper</span><span class="p">())</span> <span class="o">/</span> <span class="n">lu_area</span>  <span class="c1"># t/ha</span>
 
 <span class="n">q_dry_target</span> <span class="o">=</span> <span class="n">q_lu_target</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lm</span><span class="o">=</span><span class="s1">&#39;dry&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">drop_vars</span><span class="p">(</span><span class="s1">&#39;spatial_ref&#39;</span><span class="p">)</span>
@@ -7810,6 +7863,7 @@ document.write(`
 <div class="cell_output docutils container">
 <img alt="_images/28b5cfccde818c8512a0e9b3fbdde04b084fa1da91da7913802b9bcf984dcad5.png" src="_images/28b5cfccde818c8512a0e9b3fbdde04b084fa1da91da7913802b9bcf984dcad5.png" />
 </div>
+</details>
 </div>
 </section>
 <section id="water-requirement">
@@ -7873,11 +7927,16 @@ document.write(`
 </div>
 </div>
 </div>
-<div class="cell docutils container">
+<div class="cell tag_hide-cell docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell content</span>
+<span class="expanded">Hide code cell content</span>
+</summary>
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">c_arr</span> <span class="o">=</span> <span class="n">c_total</span>
 
-<span class="c1"># HIDE CODE</span>
+<span class="c1"># HIDDEN</span>
 <span class="n">c_dry</span> <span class="o">=</span> <span class="n">c_arr</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lm</span><span class="o">=</span><span class="s1">&#39;dry&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">drop_vars</span><span class="p">(</span><span class="s1">&#39;spatial_ref&#39;</span><span class="p">)</span>
 <span class="n">c_irr</span> <span class="o">=</span> <span class="n">c_arr</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lm</span><span class="o">=</span><span class="s1">&#39;irr&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">drop_vars</span><span class="p">(</span><span class="s1">&#39;spatial_ref&#39;</span><span class="p">)</span>
 
@@ -7888,10 +7947,16 @@ document.write(`
 <div class="cell_output docutils container">
 <img alt="_images/293c6c37a0319fbacdf2d747e797f2023760ffc25d1afb32bfa2a4c8246b6f64.png" src="_images/293c6c37a0319fbacdf2d747e797f2023760ffc25d1afb32bfa2a4c8246b6f64.png" />
 </div>
+</details>
 </div>
-<div class="cell docutils container">
+<div class="cell tag_hide-cell docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell content</span>
+<span class="expanded">Hide code cell content</span>
+</summary>
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># HIDE CODE</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># HIDDEN</span>
 
 <span class="n">r_dry</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lm</span><span class="o">=</span><span class="s1">&#39;dry&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">drop_vars</span><span class="p">(</span><span class="s1">&#39;spatial_ref&#39;</span><span class="p">)</span>
 <span class="n">r_irr</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lm</span><span class="o">=</span><span class="s1">&#39;irr&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">drop_vars</span><span class="p">(</span><span class="s1">&#39;spatial_ref&#39;</span><span class="p">)</span>
@@ -7903,6 +7968,7 @@ document.write(`
 <div class="cell_output docutils container">
 <img alt="_images/e227c45954a69af71b32f797f4c2511055aa60d27bc3fe7b54a01a0c0ed3500d.png" src="_images/e227c45954a69af71b32f797f4c2511055aa60d27bc3fe7b54a01a0c0ed3500d.png" />
 </div>
+</details>
 </div>
 </section>
 <section id="ghg-emmisions">
@@ -7926,9 +7992,14 @@ document.write(`
 </div>
 </div>
 </div>
-<div class="cell docutils container">
+<div class="cell tag_hide-cell docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell content</span>
+<span class="expanded">Hide code cell content</span>
+</summary>
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># HIDE CODE</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># HIDDEN</span>
 <span class="n">agghg_crops_xr_lu</span> <span class="o">=</span> <span class="n">agghg_crops_xr</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lu</span><span class="o">=</span><span class="n">lu_desc</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Type&#39;</span><span class="p">],</span> <span class="n">skipna</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>    <span class="c1"># kg/ha</span>
 <span class="n">ghg_dry</span> <span class="o">=</span> <span class="n">agghg_crops_xr_lu</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lm</span><span class="o">=</span><span class="s1">&#39;dry&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">drop_vars</span><span class="p">(</span><span class="s1">&#39;spatial_ref&#39;</span><span class="p">)</span> 
 <span class="n">ghg_irr</span> <span class="o">=</span> <span class="n">agghg_crops_xr_lu</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lm</span><span class="o">=</span><span class="s1">&#39;irr&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">drop_vars</span><span class="p">(</span><span class="s1">&#39;spatial_ref&#39;</span><span class="p">)</span> 
@@ -7940,6 +8011,7 @@ document.write(`
 <div class="cell_output docutils container">
 <img alt="_images/6d6468b2e6880961498ad7e7ff7db1ec104c726af78376e551fbfd6ec9b91424.png" src="_images/6d6468b2e6880961498ad7e7ff7db1ec104c726af78376e551fbfd6ec9b91424.png" />
 </div>
+</details>
 </div>
 </section>
 <section id="find-the-optimized-solution">
