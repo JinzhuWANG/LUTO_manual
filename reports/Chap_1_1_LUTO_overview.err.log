@@ -20,42 +20,74 @@ nbclient.exceptions.CellExecutionError: An error occurred while executing the fo
 ------------------
 # REMOVE
 
-# Define year, lu_code
-year_begin = 2010
-year_target = 2050
-lu_code = 25 # Winter cereals
-lu_desc = data.AGRICULTURAL_LANDUSES[lu_code]
+'''
+Here are the code to run LUTO first, so that we can have the variables and objects required for illustration in the notebook.
+'''
 
-# Parameters to save xarray
-output_dir = 'luto/tools/Manual_jupyter_books/outputs'
-encoding={'data': {"compression": "gzip", "compression_opts": 9,  "dtype": 'float32'}}
-
-# Get the lumap
-lumap = mrj_to_xr(data, data.ag_dvars[year_begin])
-lu_arr_dry = lumap.sel(lm='dry', lu=lu_desc)
-lu_arr_irr = lumap.sel(lm='irr', lu=lu_desc)
-
-lu_mask = arr_to_xr(data, np.ones_like(lumap)) == 1
-lu_area = arr_to_xr(data, data.REAL_AREA)
+# Reload all modules before excuting each cell, so that we can modify the imported custom functions on-the-fly without rerun the whole model.
+%load_ext autoreload
+%autoreload 2
 
 
-# Save to disk
-lu_arr_dry.name = 'data'
-lu_arr_irr.name = 'data'
+# Imports
+import os
+import xarray as xr
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import plotnine as p9
+import geopandas as gpd
 
-lu_arr_dry.to_netcdf(f'{output_dir}/lu_arr_dry.nc', engine='h5netcdf', encoding=encoding)
-lu_arr_irr.to_netcdf(f'{output_dir}/lu_arr_irr.nc', engine='h5netcdf', encoding=encoding)
+
+from rasterstats import zonal_stats
+from mizani.formatters import scientific_format
+
+
+# cd to the root folder of LUTO project
+os.chdir('N:/LUF-Modelling/LUTO2_JZ/luto-2.0')
+from luto.tools.Manual_jupyter_books.helpers import map_to_4band, mrj_to_xr, arr_to_xr, map_to_plot
+from luto.economics.agricultural.quantity import get_quantity_matrices
+from luto.economics.agricultural.water import get_wreq_matrices
+from luto.tools.Manual_jupyter_books.helpers.parameters import legend_params
+
+
+# # Run LUTO
+# import luto.simulation as sim
+# data = sim.load_data()
+# sim.run(data=data, base=2010, target=2050)
 ------------------
 
 
 [1;31m---------------------------------------------------------------------------[0m
-[1;31mNameError[0m                                 Traceback (most recent call last)
-Cell [1;32mIn[2], line 7[0m
-[0;32m      5[0m year_target [38;5;241m=[39m [38;5;241m2050[39m
-[0;32m      6[0m lu_code [38;5;241m=[39m [38;5;241m25[39m [38;5;66;03m# Winter cereals[39;00m
-[1;32m----> 7[0m lu_desc [38;5;241m=[39m [43mdata[49m[38;5;241m.[39mAGRICULTURAL_LANDUSES[lu_code]
-[0;32m      9[0m [38;5;66;03m# Parameters to save xarray[39;00m
-[0;32m     10[0m output_dir [38;5;241m=[39m [38;5;124m'[39m[38;5;124mluto/tools/Manual_jupyter_books/outputs[39m[38;5;124m'[39m
+[1;31mImportError[0m                               Traceback (most recent call last)
+Cell [1;32mIn[1], line 28[0m
+[0;32m     26[0m [38;5;66;03m# cd to the root folder of LUTO project[39;00m
+[0;32m     27[0m os[38;5;241m.[39mchdir([38;5;124m'[39m[38;5;124mN:/LUF-Modelling/LUTO2_JZ/luto-2.0[39m[38;5;124m'[39m)
+[1;32m---> 28[0m [38;5;28;01mfrom[39;00m [38;5;21;01mluto[39;00m[38;5;21;01m.[39;00m[38;5;21;01mtools[39;00m[38;5;21;01m.[39;00m[38;5;21;01mManual_jupyter_books[39;00m[38;5;21;01m.[39;00m[38;5;21;01mhelpers[39;00m [38;5;28;01mimport[39;00m map_to_4band, mrj_to_xr, arr_to_xr, map_to_plot
+[0;32m     29[0m [38;5;28;01mfrom[39;00m [38;5;21;01mluto[39;00m[38;5;21;01m.[39;00m[38;5;21;01meconomics[39;00m[38;5;21;01m.[39;00m[38;5;21;01magricultural[39;00m[38;5;21;01m.[39;00m[38;5;21;01mquantity[39;00m [38;5;28;01mimport[39;00m get_quantity_matrices
+[0;32m     30[0m [38;5;28;01mfrom[39;00m [38;5;21;01mluto[39;00m[38;5;21;01m.[39;00m[38;5;21;01meconomics[39;00m[38;5;21;01m.[39;00m[38;5;21;01magricultural[39;00m[38;5;21;01m.[39;00m[38;5;21;01mwater[39;00m [38;5;28;01mimport[39;00m get_wreq_matrices
 
-[1;31mNameError[0m: name 'data' is not defined
+File [1;32mN:\LUF-Modelling\LUTO2_JZ\luto-2.0\luto\tools\__init__.py:41[0m
+[0;32m     37[0m [38;5;28;01mfrom[39;00m [38;5;21;01mdatetime[39;00m [38;5;28;01mimport[39;00m datetime
+[0;32m     38[0m [38;5;28;01mfrom[39;00m [38;5;21;01mjoblib[39;00m [38;5;28;01mimport[39;00m Parallel, delayed
+[1;32m---> 41[0m [38;5;28;01mfrom[39;00m [38;5;21;01mluto[39;00m[38;5;21;01m.[39;00m[38;5;21;01mtools[39;00m[38;5;21;01m.[39;00m[38;5;21;01mreport[39;00m[38;5;21;01m.[39;00m[38;5;21;01mcreate_html[39;00m [38;5;28;01mimport[39;00m data2html
+[0;32m     42[0m [38;5;28;01mfrom[39;00m [38;5;21;01mluto[39;00m[38;5;21;01m.[39;00m[38;5;21;01mtools[39;00m[38;5;21;01m.[39;00m[38;5;21;01mreport[39;00m[38;5;21;01m.[39;00m[38;5;21;01mcreate_report_data[39;00m [38;5;28;01mimport[39;00m save_report_data
+[0;32m     43[0m [38;5;28;01mfrom[39;00m [38;5;21;01mluto[39;00m[38;5;21;01m.[39;00m[38;5;21;01mtools[39;00m[38;5;21;01m.[39;00m[38;5;21;01mreport[39;00m[38;5;21;01m.[39;00m[38;5;21;01mcreate_static_maps[39;00m [38;5;28;01mimport[39;00m TIF2MAP
+
+File [1;32mN:\LUF-Modelling\LUTO2_JZ\luto-2.0\luto\tools\report\create_html.py:7[0m
+[0;32m      4[0m [38;5;28;01mfrom[39;00m [38;5;21;01mglob[39;00m [38;5;28;01mimport[39;00m glob
+[0;32m      6[0m [38;5;28;01mfrom[39;00m [38;5;21;01mluto[39;00m[38;5;21;01m.[39;00m[38;5;21;01mtools[39;00m[38;5;21;01m.[39;00m[38;5;21;01mreport[39;00m[38;5;21;01m.[39;00m[38;5;21;01mdata_tools[39;00m [38;5;28;01mimport[39;00m get_all_files
+[1;32m----> 7[0m [38;5;28;01mfrom[39;00m [38;5;21;01mluto[39;00m[38;5;21;01m.[39;00m[38;5;21;01mtools[39;00m[38;5;21;01m.[39;00m[38;5;21;01mreport[39;00m[38;5;21;01m.[39;00m[38;5;21;01mdata_tools[39;00m[38;5;21;01m.[39;00m[38;5;21;01mhelper_func[39;00m [38;5;28;01mimport[39;00m add_data_2_html, add_txt_2_html
+[0;32m      8[0m [38;5;28;01mfrom[39;00m [38;5;21;01mluto[39;00m[38;5;21;01m.[39;00m[38;5;21;01mtools[39;00m[38;5;21;01m.[39;00m[38;5;21;01mreport[39;00m[38;5;21;01m.[39;00m[38;5;21;01mdata_tools[39;00m[38;5;21;01m.[39;00m[38;5;21;01mparameters[39;00m [38;5;28;01mimport[39;00m SPATIAL_MAP_DICT, RENAME_AM_NON_AG
+[0;32m     12[0m [38;5;66;03m####################################################[39;00m
+[0;32m     13[0m [38;5;66;03m#         setting up working variables             #[39;00m
+[0;32m     14[0m [38;5;66;03m####################################################[39;00m
+
+File [1;32mN:\LUF-Modelling\LUTO2_JZ\luto-2.0\luto\tools\report\data_tools\helper_func.py:2[0m
+[0;32m      1[0m [38;5;28;01mimport[39;00m [38;5;21;01mos[39;00m
+[1;32m----> 2[0m [38;5;28;01mfrom[39;00m [38;5;21;01mlxml[39;00m [38;5;28;01mimport[39;00m etree
+[0;32m      3[0m [38;5;28;01mfrom[39;00m  [38;5;21;01mlxml[39;00m[38;5;21;01m.[39;00m[38;5;21;01metree[39;00m [38;5;28;01mimport[39;00m Element
+[0;32m      7[0m [38;5;28;01mdef[39;00m [38;5;21mlist_all_files[39m(directory):
+
+[1;31mImportError[0m: DLL load failed while importing etree: Access is denied.
 
