@@ -34,8 +34,8 @@ encoding={'data': {"compression": "gzip", "compression_opts": 9,  "dtype": 'floa
 lumap = mrj_to_xr(data, data.ag_dvars[year_begin])
 
 lu_arr = lumap.sel(lu=lu_desc)
-lu_arr_dry = lumap.sel(lm='dry')
-lu_arr_irr = lumap.sel(lm='irr')
+lu_arr_dry = lu_arr.sel(lm='dry')
+lu_arr_irr = lu_arr.sel(lm='irr')
 
 lu_mask = arr_to_xr(data, np.ones_like(lumap)) == 1
 lu_area = arr_to_xr(data, data.REAL_AREA)
