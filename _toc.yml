@@ -2,6 +2,12 @@
 # Learn more at https://jupyterbook.org/customize/toc.html
 
 format: jb-book
-root: Chap_1_1_LUTO_overview
-# chapters:
+root: Chap_1_LUTO_overview-0
+parts:
+  - caption: Quick Overview
+    numbered: True
+    chapters:
+    - file: Chap_1_LUTO_overview-1
+    - file: Chap_1_LUTO_overview-2
+    - file: Chap_1_LUTO_overview-3
 
