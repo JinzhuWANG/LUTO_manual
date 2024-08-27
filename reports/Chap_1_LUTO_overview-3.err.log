@@ -22,45 +22,20 @@ Traceback (most recent call last):
 nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
 ------------------
 # REMOVE
-
-# Define year, lu_code
-year_begin = 2010
-year_target = 2050
-lu_code = 25 # Winter cereals
-lu_desc = data.AGRICULTURAL_LANDUSES[lu_code]
-
-# Parameters to save xarray
-output_dir = 'luto/tools/Manual_jupyter_books/outputs'
-encoding={'data': {"compression": "gzip", "compression_opts": 9,  "dtype": 'float32'}}
-
-# Get the lumap
-lumap = mrj_to_xr(data, data.ag_dvars[year_begin])
-
-lu_arr = lumap.sel(lu=lu_desc)
-lu_arr_dry = lu_arr.sel(lm='dry')
-lu_arr_irr = lu_arr.sel(lm='irr')
-
-lu_mask = arr_to_xr(data, np.ones_like(lumap)) == 1
-lu_area = arr_to_xr(data, data.REAL_AREA)
-
-
-# Save to disk
-lu_arr_dry.name = 'data'
-lu_arr_irr.name = 'data'
-
-lu_arr_dry.to_netcdf(f'{output_dir}/lu_arr_dry.nc', engine='h5netcdf', encoding=encoding)
-lu_arr_irr.to_netcdf(f'{output_dir}/lu_arr_irr.nc', engine='h5netcdf', encoding=encoding)
+yr_idx = year_target - year_begin
+# Get the quantity matrices
+q_mrp = get_quantity_matrices(data, yr_idx).astype(np.float32)          # t/cell
+q_mrp_xr = mrj_to_xr(data, q_mrp).expand_dims({'year': [year_target]})  
 ------------------
 
 [1;31m---------------------------------------------------------------------------[0m
 [1;31mNameError[0m                                 Traceback (most recent call last)
-Cell [1;32mIn[2], line 7[0m
-[0;32m      5[0m year_target [38;5;241m=[39m [38;5;241m2050[39m
-[0;32m      6[0m lu_code [38;5;241m=[39m [38;5;241m25[39m [38;5;66;03m# Winter cereals[39;00m
-[1;32m----> 7[0m lu_desc [38;5;241m=[39m [43mdata[49m[38;5;241m.[39mAGRICULTURAL_LANDUSES[lu_code]
-[0;32m      9[0m [38;5;66;03m# Parameters to save xarray[39;00m
-[0;32m     10[0m output_dir [38;5;241m=[39m [38;5;124m'[39m[38;5;124mluto/tools/Manual_jupyter_books/outputs[39m[38;5;124m'[39m
+Cell [1;32mIn[1], line 2[0m
+[0;32m      1[0m [38;5;66;03m# REMOVE[39;00m
+[1;32m----> 2[0m yr_idx [38;5;241m=[39m [43myear_target[49m [38;5;241m-[39m year_begin
+[0;32m      3[0m [38;5;66;03m# Get the quantity matrices[39;00m
+[0;32m      4[0m q_mrp [38;5;241m=[39m get_quantity_matrices(data, yr_idx)[38;5;241m.[39mastype(np[38;5;241m.[39mfloat32)          [38;5;66;03m# t/cell[39;00m
 
-[1;31mNameError[0m: name 'data' is not defined
-NameError: name 'data' is not defined
+[1;31mNameError[0m: name 'year_target' is not defined
+NameError: name 'year_target' is not defined
 

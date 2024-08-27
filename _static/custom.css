@@ -6,3 +6,10 @@ table {
 table th, table td {
     padding: 5px; /* Adjust padding as needed */
 }
+
+
+.output.text_html table th,
+.output.text_html table td {
+    font-size: 5px;
+}
+

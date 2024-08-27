@@ -1,0 +1,1183 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>2. Input Data &#8212; LUTO User Manual</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=85637d70" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'Chap_1_1_LUTO_overview-2';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="3. Finding the Optimized Solution to Meet Demand" href="Chap_1_1_LUTO_overview-3.html" />
+    <link rel="prev" title="1. Land-use Map and Demand" href="Chap_1_1_LUTO_overview-1.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="Chap_1_1_LUTO_overview-0.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.jpg" class="logo__image only-light" alt="LUTO User Manual - Home"/>
+    <script>document.write(`<img src="_static/logo.jpg" class="logo__image only-dark" alt="LUTO User Manual - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="Chap_1_1_LUTO_overview-0.html">
+                    A quick overview to LUTO model
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Quick Overview</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Chap_1_1_LUTO_overview-1.html">1. Land-use Map and Demand</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">2. Input Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Chap_1_1_LUTO_overview-3.html">3. Finding the Optimized Solution to Meet Demand</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/land-use-trade-offs/luto-2.0" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/Chap_1_1_LUTO_overview-2.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Input Data</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#economic-environmental-and-productivity-data">2.1. Economic, Environmental, and productivity data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#climate-change-impacts">2.2. Climate change impacts</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="input-data">
+<h1><span class="section-number">2. </span>Input Data<a class="headerlink" href="#input-data" title="Link to this heading">#</a></h1>
+<section id="economic-environmental-and-productivity-data">
+<h2><span class="section-number">2.1. </span>Economic, Environmental, and productivity data<a class="headerlink" href="#economic-environmental-and-productivity-data" title="Link to this heading">#</a></h2>
+<p>In LUTO, the productivity is a map where each cell represents the unit production given a land-use. Note the productivities for crop, livestock and dairy are different.</p>
+<ul class="simple">
+<li><p>For crops, each productivity cell represents tonnes/ha</p></li>
+<li><p>For livestock, each productivity cell represents heads/ha</p></li>
+<li><p>For dairy, each productivity cell represents megalitres/ha</p></li>
+</ul>
+<p>The productivity of crops lives in the <code class="docutils literal notranslate"><span class="pre">data.AGEC_CROPS</span></code> (livestock in the <code class="docutils literal notranslate"><span class="pre">data.AGEC_LVSTK</span></code>) variable as a pd.DataFrame. Both dataframes include cost, revenue, and water requirement data, in addition to productivity records. You can find their abbreviations and full descriptions below:</p>
+<p>The filed <code class="docutils literal notranslate"><span class="pre">crops</span></code> are explained in the below table.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Abbreviations</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>AC</p></td>
+<td><p>Area cost ($/ha)</p></td>
+</tr>
+<tr class="row-odd"><td><p>FDC</p></td>
+<td><p>Fixed depreciation cost ($/ha)</p></td>
+</tr>
+<tr class="row-even"><td><p>FLC</p></td>
+<td><p>Fixed labour cost ($/ha)</p></td>
+</tr>
+<tr class="row-odd"><td><p>FOC</p></td>
+<td><p>Fixed operating cost ($/ha)</p></td>
+</tr>
+<tr class="row-even"><td><p>P1</p></td>
+<td><p>Price of output 1 ($/t)</p></td>
+</tr>
+<tr class="row-odd"><td><p>QC</p></td>
+<td><p>Quantity cost ($/t)</p></td>
+</tr>
+<tr class="row-even"><td><p>WR</p></td>
+<td><p>Water requirement (t/ha)</p></td>
+</tr>
+<tr class="row-odd"><td><p>WP</p></td>
+<td><p>Water price ($/t)</p></td>
+</tr>
+<tr class="row-even"><td><p>Yield</p></td>
+<td><p>The yield of crop (t/ha)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The column abbreviations and their meanings for <code class="docutils literal notranslate"><span class="pre">livestock</span></code> are explained in the below table.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Abbreviations</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>F1</p></td>
+<td><p>Fraction of herd to produce &lt;Meat for <code class="docutils literal notranslate"><span class="pre">BEEF</span></code> and <code class="docutils literal notranslate"><span class="pre">SHEEP</span></code>&gt; or &lt;milk for <code class="docutils literal notranslate"><span class="pre">DAIRY</span></code>&gt;</p></td>
+</tr>
+<tr class="row-odd"><td><p>F2</p></td>
+<td><p>Fraction of herd to produce <code class="docutils literal notranslate"><span class="pre">WOOL</span></code> for <code class="docutils literal notranslate"><span class="pre">SHEEP</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>F3</p></td>
+<td><p>Fraction of herd as <code class="docutils literal notranslate"><span class="pre">Live</span> <span class="pre">export</span></code> for <code class="docutils literal notranslate"><span class="pre">BEEF</span></code> and <code class="docutils literal notranslate"><span class="pre">SHEEP</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Q1</p></td>
+<td><p>Quantity of output 1 (tonnes/head)</p></td>
+</tr>
+<tr class="row-even"><td><p>Q2</p></td>
+<td><p>Quantity of output 2 (tonnes/head)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Q3</p></td>
+<td><p>Quantity of output 3 (animal weight tonnes/head)</p></td>
+</tr>
+<tr class="row-even"><td><p>P1</p></td>
+<td><p>Price of output 1 ($/t)</p></td>
+</tr>
+<tr class="row-odd"><td><p>P2</p></td>
+<td><p>Price of output 2 ($/t)</p></td>
+</tr>
+<tr class="row-even"><td><p>P3</p></td>
+<td><p>Price of output 3 ($/t)</p></td>
+</tr>
+<tr class="row-odd"><td><p>WR_DRN</p></td>
+<td><p>Water requirement (t/head)</p></td>
+</tr>
+<tr class="row-even"><td><p>WR_IRR</p></td>
+<td><p>Water requirement (t/ha) (applies to <code class="docutils literal notranslate"><span class="pre">irr</span></code> livestock)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Observing the economic data for crops, we can see the index is <code class="docutils literal notranslate"><span class="pre">CELL_ID</span></code>, and the column has 3 levels (from top to bottom, each level indicates data type, water supply, and land use).</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">4</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># HIDE CODE</span>
+<span class="ne">----&gt; </span><span class="mi">4</span> <span class="n">df</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">AGEC_CROPS</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="n">df_styled</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">set_table_styles</span><span class="p">([</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span>     <span class="p">{</span><span class="s1">&#39;selector&#39;</span><span class="p">:</span> <span class="s1">&#39;td&#39;</span><span class="p">,</span> <span class="s1">&#39;props&#39;</span><span class="p">:</span> <span class="p">[(</span><span class="s1">&#39;font-size&#39;</span><span class="p">,</span> <span class="s1">&#39;10pt&#39;</span><span class="p">)]},</span>
+<span class="g g-Whitespace">      </span><span class="mi">7</span>     <span class="p">{</span><span class="s1">&#39;selector&#39;</span><span class="p">:</span> <span class="s1">&#39;th&#39;</span><span class="p">,</span> <span class="s1">&#39;props&#39;</span><span class="p">:</span> <span class="p">[(</span><span class="s1">&#39;font-size&#39;</span><span class="p">,</span> <span class="s1">&#39;10pt&#39;</span><span class="p">)]}</span>
+<span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="p">])</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">precision</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">10</span> <span class="n">df_styled</span>
+
+<span class="ne">NameError</span>: name &#39;data&#39; is not defined
+</pre></div>
+</div>
+</div>
+</div>
+<p>However, the economic data for livestock does not have water supply infomation in the column. Why is that? We can see that the <code class="docutils literal notranslate"><span class="pre">data.AGEC_LVSTK</span></code> only includes yield of dryland animals. In LUTO, we multiply the dryland productivety by a factor of 2 when to get irrigated land productivity. See <a class="reference external" href="https://github.com/JinzhuWANG/luto-2.0/blob/dbe1fcfdf57075867a6f46de76dd6d0f872fa105/luto/economics/agricultural/quantity.py#L131">here</a> for the detailed implementation.</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<div class="output text_html"><style type="text/css">
+#T_069d9 td {
+  font-size: 10pt;
+}
+#T_069d9 th {
+  font-size: 10pt;
+}
+</style>
+<table id="T_069d9">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_069d9_level0_col0" class="col_heading level0 col0" >F1</th>
+      <th id="T_069d9_level0_col1" class="col_heading level0 col1" >Q1</th>
+      <th id="T_069d9_level0_col2" class="col_heading level0 col2" >P1</th>
+      <th id="T_069d9_level0_col3" class="col_heading level0 col3" >AC</th>
+      <th id="T_069d9_level0_col4" class="col_heading level0 col4" >QC</th>
+      <th id="T_069d9_level0_col5" class="col_heading level0 col5" >FOC</th>
+      <th id="T_069d9_level0_col6" class="col_heading level0 col6" >FLC</th>
+      <th id="T_069d9_level0_col7" class="col_heading level0 col7" >FDC</th>
+      <th id="T_069d9_level0_col8" class="col_heading level0 col8" >WR_DRN</th>
+      <th id="T_069d9_level0_col9" class="col_heading level0 col9" >WR_IRR</th>
+      <th id="T_069d9_level0_col10" class="col_heading level0 col10" >F1</th>
+      <th id="T_069d9_level0_col11" class="col_heading level0 col11" >F3</th>
+      <th id="T_069d9_level0_col12" class="col_heading level0 col12" >Q1</th>
+      <th id="T_069d9_level0_col13" class="col_heading level0 col13" >Q3</th>
+      <th id="T_069d9_level0_col14" class="col_heading level0 col14" >P1</th>
+      <th id="T_069d9_level0_col15" class="col_heading level0 col15" >P3</th>
+      <th id="T_069d9_level0_col16" class="col_heading level0 col16" >AC</th>
+      <th id="T_069d9_level0_col17" class="col_heading level0 col17" >QC</th>
+      <th id="T_069d9_level0_col18" class="col_heading level0 col18" >FOC</th>
+      <th id="T_069d9_level0_col19" class="col_heading level0 col19" >FLC</th>
+      <th id="T_069d9_level0_col20" class="col_heading level0 col20" >FDC</th>
+      <th id="T_069d9_level0_col21" class="col_heading level0 col21" >WR_DRN</th>
+      <th id="T_069d9_level0_col22" class="col_heading level0 col22" >WR_IRR</th>
+      <th id="T_069d9_level0_col23" class="col_heading level0 col23" >F1</th>
+      <th id="T_069d9_level0_col24" class="col_heading level0 col24" >F2</th>
+      <th id="T_069d9_level0_col25" class="col_heading level0 col25" >F3</th>
+      <th id="T_069d9_level0_col26" class="col_heading level0 col26" >Q1</th>
+      <th id="T_069d9_level0_col27" class="col_heading level0 col27" >Q2</th>
+      <th id="T_069d9_level0_col28" class="col_heading level0 col28" >Q3</th>
+      <th id="T_069d9_level0_col29" class="col_heading level0 col29" >P1</th>
+      <th id="T_069d9_level0_col30" class="col_heading level0 col30" >P2</th>
+      <th id="T_069d9_level0_col31" class="col_heading level0 col31" >P3</th>
+      <th id="T_069d9_level0_col32" class="col_heading level0 col32" >AC</th>
+      <th id="T_069d9_level0_col33" class="col_heading level0 col33" >QC</th>
+      <th id="T_069d9_level0_col34" class="col_heading level0 col34" >FOC</th>
+      <th id="T_069d9_level0_col35" class="col_heading level0 col35" >FLC</th>
+      <th id="T_069d9_level0_col36" class="col_heading level0 col36" >FDC</th>
+      <th id="T_069d9_level0_col37" class="col_heading level0 col37" >WR_DRN</th>
+      <th id="T_069d9_level0_col38" class="col_heading level0 col38" >WR_IRR</th>
+    </tr>
+    <tr>
+      <th class="blank level1" >&nbsp;</th>
+      <th id="T_069d9_level1_col0" class="col_heading level1 col0" >DAIRY</th>
+      <th id="T_069d9_level1_col1" class="col_heading level1 col1" >DAIRY</th>
+      <th id="T_069d9_level1_col2" class="col_heading level1 col2" >DAIRY</th>
+      <th id="T_069d9_level1_col3" class="col_heading level1 col3" >DAIRY</th>
+      <th id="T_069d9_level1_col4" class="col_heading level1 col4" >DAIRY</th>
+      <th id="T_069d9_level1_col5" class="col_heading level1 col5" >DAIRY</th>
+      <th id="T_069d9_level1_col6" class="col_heading level1 col6" >DAIRY</th>
+      <th id="T_069d9_level1_col7" class="col_heading level1 col7" >DAIRY</th>
+      <th id="T_069d9_level1_col8" class="col_heading level1 col8" >DAIRY</th>
+      <th id="T_069d9_level1_col9" class="col_heading level1 col9" >DAIRY</th>
+      <th id="T_069d9_level1_col10" class="col_heading level1 col10" >BEEF</th>
+      <th id="T_069d9_level1_col11" class="col_heading level1 col11" >BEEF</th>
+      <th id="T_069d9_level1_col12" class="col_heading level1 col12" >BEEF</th>
+      <th id="T_069d9_level1_col13" class="col_heading level1 col13" >BEEF</th>
+      <th id="T_069d9_level1_col14" class="col_heading level1 col14" >BEEF</th>
+      <th id="T_069d9_level1_col15" class="col_heading level1 col15" >BEEF</th>
+      <th id="T_069d9_level1_col16" class="col_heading level1 col16" >BEEF</th>
+      <th id="T_069d9_level1_col17" class="col_heading level1 col17" >BEEF</th>
+      <th id="T_069d9_level1_col18" class="col_heading level1 col18" >BEEF</th>
+      <th id="T_069d9_level1_col19" class="col_heading level1 col19" >BEEF</th>
+      <th id="T_069d9_level1_col20" class="col_heading level1 col20" >BEEF</th>
+      <th id="T_069d9_level1_col21" class="col_heading level1 col21" >BEEF</th>
+      <th id="T_069d9_level1_col22" class="col_heading level1 col22" >BEEF</th>
+      <th id="T_069d9_level1_col23" class="col_heading level1 col23" >SHEEP</th>
+      <th id="T_069d9_level1_col24" class="col_heading level1 col24" >SHEEP</th>
+      <th id="T_069d9_level1_col25" class="col_heading level1 col25" >SHEEP</th>
+      <th id="T_069d9_level1_col26" class="col_heading level1 col26" >SHEEP</th>
+      <th id="T_069d9_level1_col27" class="col_heading level1 col27" >SHEEP</th>
+      <th id="T_069d9_level1_col28" class="col_heading level1 col28" >SHEEP</th>
+      <th id="T_069d9_level1_col29" class="col_heading level1 col29" >SHEEP</th>
+      <th id="T_069d9_level1_col30" class="col_heading level1 col30" >SHEEP</th>
+      <th id="T_069d9_level1_col31" class="col_heading level1 col31" >SHEEP</th>
+      <th id="T_069d9_level1_col32" class="col_heading level1 col32" >SHEEP</th>
+      <th id="T_069d9_level1_col33" class="col_heading level1 col33" >SHEEP</th>
+      <th id="T_069d9_level1_col34" class="col_heading level1 col34" >SHEEP</th>
+      <th id="T_069d9_level1_col35" class="col_heading level1 col35" >SHEEP</th>
+      <th id="T_069d9_level1_col36" class="col_heading level1 col36" >SHEEP</th>
+      <th id="T_069d9_level1_col37" class="col_heading level1 col37" >SHEEP</th>
+      <th id="T_069d9_level1_col38" class="col_heading level1 col38" >SHEEP</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_069d9_level0_row0" class="row_heading level0 row0" >273</th>
+      <td id="T_069d9_row0_col0" class="data row0 col0" >nan</td>
+      <td id="T_069d9_row0_col1" class="data row0 col1" >nan</td>
+      <td id="T_069d9_row0_col2" class="data row0 col2" >nan</td>
+      <td id="T_069d9_row0_col3" class="data row0 col3" >nan</td>
+      <td id="T_069d9_row0_col4" class="data row0 col4" >nan</td>
+      <td id="T_069d9_row0_col5" class="data row0 col5" >nan</td>
+      <td id="T_069d9_row0_col6" class="data row0 col6" >nan</td>
+      <td id="T_069d9_row0_col7" class="data row0 col7" >nan</td>
+      <td id="T_069d9_row0_col8" class="data row0 col8" >nan</td>
+      <td id="T_069d9_row0_col9" class="data row0 col9" >nan</td>
+      <td id="T_069d9_row0_col10" class="data row0 col10" >nan</td>
+      <td id="T_069d9_row0_col11" class="data row0 col11" >nan</td>
+      <td id="T_069d9_row0_col12" class="data row0 col12" >nan</td>
+      <td id="T_069d9_row0_col13" class="data row0 col13" >nan</td>
+      <td id="T_069d9_row0_col14" class="data row0 col14" >nan</td>
+      <td id="T_069d9_row0_col15" class="data row0 col15" >nan</td>
+      <td id="T_069d9_row0_col16" class="data row0 col16" >nan</td>
+      <td id="T_069d9_row0_col17" class="data row0 col17" >nan</td>
+      <td id="T_069d9_row0_col18" class="data row0 col18" >nan</td>
+      <td id="T_069d9_row0_col19" class="data row0 col19" >nan</td>
+      <td id="T_069d9_row0_col20" class="data row0 col20" >nan</td>
+      <td id="T_069d9_row0_col21" class="data row0 col21" >nan</td>
+      <td id="T_069d9_row0_col22" class="data row0 col22" >nan</td>
+      <td id="T_069d9_row0_col23" class="data row0 col23" >nan</td>
+      <td id="T_069d9_row0_col24" class="data row0 col24" >nan</td>
+      <td id="T_069d9_row0_col25" class="data row0 col25" >nan</td>
+      <td id="T_069d9_row0_col26" class="data row0 col26" >nan</td>
+      <td id="T_069d9_row0_col27" class="data row0 col27" >nan</td>
+      <td id="T_069d9_row0_col28" class="data row0 col28" >nan</td>
+      <td id="T_069d9_row0_col29" class="data row0 col29" >nan</td>
+      <td id="T_069d9_row0_col30" class="data row0 col30" >nan</td>
+      <td id="T_069d9_row0_col31" class="data row0 col31" >nan</td>
+      <td id="T_069d9_row0_col32" class="data row0 col32" >nan</td>
+      <td id="T_069d9_row0_col33" class="data row0 col33" >nan</td>
+      <td id="T_069d9_row0_col34" class="data row0 col34" >nan</td>
+      <td id="T_069d9_row0_col35" class="data row0 col35" >nan</td>
+      <td id="T_069d9_row0_col36" class="data row0 col36" >nan</td>
+      <td id="T_069d9_row0_col37" class="data row0 col37" >nan</td>
+      <td id="T_069d9_row0_col38" class="data row0 col38" >nan</td>
+    </tr>
+    <tr>
+      <th id="T_069d9_level0_row1" class="row_heading level0 row1" >335</th>
+      <td id="T_069d9_row1_col0" class="data row1 col0" >nan</td>
+      <td id="T_069d9_row1_col1" class="data row1 col1" >nan</td>
+      <td id="T_069d9_row1_col2" class="data row1 col2" >nan</td>
+      <td id="T_069d9_row1_col3" class="data row1 col3" >nan</td>
+      <td id="T_069d9_row1_col4" class="data row1 col4" >nan</td>
+      <td id="T_069d9_row1_col5" class="data row1 col5" >nan</td>
+      <td id="T_069d9_row1_col6" class="data row1 col6" >nan</td>
+      <td id="T_069d9_row1_col7" class="data row1 col7" >nan</td>
+      <td id="T_069d9_row1_col8" class="data row1 col8" >nan</td>
+      <td id="T_069d9_row1_col9" class="data row1 col9" >nan</td>
+      <td id="T_069d9_row1_col10" class="data row1 col10" >nan</td>
+      <td id="T_069d9_row1_col11" class="data row1 col11" >nan</td>
+      <td id="T_069d9_row1_col12" class="data row1 col12" >nan</td>
+      <td id="T_069d9_row1_col13" class="data row1 col13" >nan</td>
+      <td id="T_069d9_row1_col14" class="data row1 col14" >nan</td>
+      <td id="T_069d9_row1_col15" class="data row1 col15" >nan</td>
+      <td id="T_069d9_row1_col16" class="data row1 col16" >nan</td>
+      <td id="T_069d9_row1_col17" class="data row1 col17" >nan</td>
+      <td id="T_069d9_row1_col18" class="data row1 col18" >nan</td>
+      <td id="T_069d9_row1_col19" class="data row1 col19" >nan</td>
+      <td id="T_069d9_row1_col20" class="data row1 col20" >nan</td>
+      <td id="T_069d9_row1_col21" class="data row1 col21" >nan</td>
+      <td id="T_069d9_row1_col22" class="data row1 col22" >nan</td>
+      <td id="T_069d9_row1_col23" class="data row1 col23" >nan</td>
+      <td id="T_069d9_row1_col24" class="data row1 col24" >nan</td>
+      <td id="T_069d9_row1_col25" class="data row1 col25" >nan</td>
+      <td id="T_069d9_row1_col26" class="data row1 col26" >nan</td>
+      <td id="T_069d9_row1_col27" class="data row1 col27" >nan</td>
+      <td id="T_069d9_row1_col28" class="data row1 col28" >nan</td>
+      <td id="T_069d9_row1_col29" class="data row1 col29" >nan</td>
+      <td id="T_069d9_row1_col30" class="data row1 col30" >nan</td>
+      <td id="T_069d9_row1_col31" class="data row1 col31" >nan</td>
+      <td id="T_069d9_row1_col32" class="data row1 col32" >nan</td>
+      <td id="T_069d9_row1_col33" class="data row1 col33" >nan</td>
+      <td id="T_069d9_row1_col34" class="data row1 col34" >nan</td>
+      <td id="T_069d9_row1_col35" class="data row1 col35" >nan</td>
+      <td id="T_069d9_row1_col36" class="data row1 col36" >nan</td>
+      <td id="T_069d9_row1_col37" class="data row1 col37" >nan</td>
+      <td id="T_069d9_row1_col38" class="data row1 col38" >nan</td>
+    </tr>
+    <tr>
+      <th id="T_069d9_level0_row2" class="row_heading level0 row2" >515</th>
+      <td id="T_069d9_row2_col0" class="data row2 col0" >nan</td>
+      <td id="T_069d9_row2_col1" class="data row2 col1" >nan</td>
+      <td id="T_069d9_row2_col2" class="data row2 col2" >nan</td>
+      <td id="T_069d9_row2_col3" class="data row2 col3" >nan</td>
+      <td id="T_069d9_row2_col4" class="data row2 col4" >nan</td>
+      <td id="T_069d9_row2_col5" class="data row2 col5" >nan</td>
+      <td id="T_069d9_row2_col6" class="data row2 col6" >nan</td>
+      <td id="T_069d9_row2_col7" class="data row2 col7" >nan</td>
+      <td id="T_069d9_row2_col8" class="data row2 col8" >nan</td>
+      <td id="T_069d9_row2_col9" class="data row2 col9" >nan</td>
+      <td id="T_069d9_row2_col10" class="data row2 col10" >nan</td>
+      <td id="T_069d9_row2_col11" class="data row2 col11" >nan</td>
+      <td id="T_069d9_row2_col12" class="data row2 col12" >nan</td>
+      <td id="T_069d9_row2_col13" class="data row2 col13" >nan</td>
+      <td id="T_069d9_row2_col14" class="data row2 col14" >nan</td>
+      <td id="T_069d9_row2_col15" class="data row2 col15" >nan</td>
+      <td id="T_069d9_row2_col16" class="data row2 col16" >nan</td>
+      <td id="T_069d9_row2_col17" class="data row2 col17" >nan</td>
+      <td id="T_069d9_row2_col18" class="data row2 col18" >nan</td>
+      <td id="T_069d9_row2_col19" class="data row2 col19" >nan</td>
+      <td id="T_069d9_row2_col20" class="data row2 col20" >nan</td>
+      <td id="T_069d9_row2_col21" class="data row2 col21" >nan</td>
+      <td id="T_069d9_row2_col22" class="data row2 col22" >nan</td>
+      <td id="T_069d9_row2_col23" class="data row2 col23" >nan</td>
+      <td id="T_069d9_row2_col24" class="data row2 col24" >nan</td>
+      <td id="T_069d9_row2_col25" class="data row2 col25" >nan</td>
+      <td id="T_069d9_row2_col26" class="data row2 col26" >nan</td>
+      <td id="T_069d9_row2_col27" class="data row2 col27" >nan</td>
+      <td id="T_069d9_row2_col28" class="data row2 col28" >nan</td>
+      <td id="T_069d9_row2_col29" class="data row2 col29" >nan</td>
+      <td id="T_069d9_row2_col30" class="data row2 col30" >nan</td>
+      <td id="T_069d9_row2_col31" class="data row2 col31" >nan</td>
+      <td id="T_069d9_row2_col32" class="data row2 col32" >nan</td>
+      <td id="T_069d9_row2_col33" class="data row2 col33" >nan</td>
+      <td id="T_069d9_row2_col34" class="data row2 col34" >nan</td>
+      <td id="T_069d9_row2_col35" class="data row2 col35" >nan</td>
+      <td id="T_069d9_row2_col36" class="data row2 col36" >nan</td>
+      <td id="T_069d9_row2_col37" class="data row2 col37" >nan</td>
+      <td id="T_069d9_row2_col38" class="data row2 col38" >nan</td>
+    </tr>
+    <tr>
+      <th id="T_069d9_level0_row3" class="row_heading level0 row3" >520</th>
+      <td id="T_069d9_row3_col0" class="data row3 col0" >nan</td>
+      <td id="T_069d9_row3_col1" class="data row3 col1" >nan</td>
+      <td id="T_069d9_row3_col2" class="data row3 col2" >nan</td>
+      <td id="T_069d9_row3_col3" class="data row3 col3" >nan</td>
+      <td id="T_069d9_row3_col4" class="data row3 col4" >nan</td>
+      <td id="T_069d9_row3_col5" class="data row3 col5" >nan</td>
+      <td id="T_069d9_row3_col6" class="data row3 col6" >nan</td>
+      <td id="T_069d9_row3_col7" class="data row3 col7" >nan</td>
+      <td id="T_069d9_row3_col8" class="data row3 col8" >nan</td>
+      <td id="T_069d9_row3_col9" class="data row3 col9" >nan</td>
+      <td id="T_069d9_row3_col10" class="data row3 col10" >nan</td>
+      <td id="T_069d9_row3_col11" class="data row3 col11" >nan</td>
+      <td id="T_069d9_row3_col12" class="data row3 col12" >nan</td>
+      <td id="T_069d9_row3_col13" class="data row3 col13" >nan</td>
+      <td id="T_069d9_row3_col14" class="data row3 col14" >nan</td>
+      <td id="T_069d9_row3_col15" class="data row3 col15" >nan</td>
+      <td id="T_069d9_row3_col16" class="data row3 col16" >nan</td>
+      <td id="T_069d9_row3_col17" class="data row3 col17" >nan</td>
+      <td id="T_069d9_row3_col18" class="data row3 col18" >nan</td>
+      <td id="T_069d9_row3_col19" class="data row3 col19" >nan</td>
+      <td id="T_069d9_row3_col20" class="data row3 col20" >nan</td>
+      <td id="T_069d9_row3_col21" class="data row3 col21" >nan</td>
+      <td id="T_069d9_row3_col22" class="data row3 col22" >nan</td>
+      <td id="T_069d9_row3_col23" class="data row3 col23" >nan</td>
+      <td id="T_069d9_row3_col24" class="data row3 col24" >nan</td>
+      <td id="T_069d9_row3_col25" class="data row3 col25" >nan</td>
+      <td id="T_069d9_row3_col26" class="data row3 col26" >nan</td>
+      <td id="T_069d9_row3_col27" class="data row3 col27" >nan</td>
+      <td id="T_069d9_row3_col28" class="data row3 col28" >nan</td>
+      <td id="T_069d9_row3_col29" class="data row3 col29" >nan</td>
+      <td id="T_069d9_row3_col30" class="data row3 col30" >nan</td>
+      <td id="T_069d9_row3_col31" class="data row3 col31" >nan</td>
+      <td id="T_069d9_row3_col32" class="data row3 col32" >nan</td>
+      <td id="T_069d9_row3_col33" class="data row3 col33" >nan</td>
+      <td id="T_069d9_row3_col34" class="data row3 col34" >nan</td>
+      <td id="T_069d9_row3_col35" class="data row3 col35" >nan</td>
+      <td id="T_069d9_row3_col36" class="data row3 col36" >nan</td>
+      <td id="T_069d9_row3_col37" class="data row3 col37" >nan</td>
+      <td id="T_069d9_row3_col38" class="data row3 col38" >nan</td>
+    </tr>
+    <tr>
+      <th id="T_069d9_level0_row4" class="row_heading level0 row4" >614</th>
+      <td id="T_069d9_row4_col0" class="data row4 col0" >nan</td>
+      <td id="T_069d9_row4_col1" class="data row4 col1" >nan</td>
+      <td id="T_069d9_row4_col2" class="data row4 col2" >nan</td>
+      <td id="T_069d9_row4_col3" class="data row4 col3" >nan</td>
+      <td id="T_069d9_row4_col4" class="data row4 col4" >nan</td>
+      <td id="T_069d9_row4_col5" class="data row4 col5" >nan</td>
+      <td id="T_069d9_row4_col6" class="data row4 col6" >nan</td>
+      <td id="T_069d9_row4_col7" class="data row4 col7" >nan</td>
+      <td id="T_069d9_row4_col8" class="data row4 col8" >nan</td>
+      <td id="T_069d9_row4_col9" class="data row4 col9" >nan</td>
+      <td id="T_069d9_row4_col10" class="data row4 col10" >nan</td>
+      <td id="T_069d9_row4_col11" class="data row4 col11" >nan</td>
+      <td id="T_069d9_row4_col12" class="data row4 col12" >nan</td>
+      <td id="T_069d9_row4_col13" class="data row4 col13" >nan</td>
+      <td id="T_069d9_row4_col14" class="data row4 col14" >nan</td>
+      <td id="T_069d9_row4_col15" class="data row4 col15" >nan</td>
+      <td id="T_069d9_row4_col16" class="data row4 col16" >nan</td>
+      <td id="T_069d9_row4_col17" class="data row4 col17" >nan</td>
+      <td id="T_069d9_row4_col18" class="data row4 col18" >nan</td>
+      <td id="T_069d9_row4_col19" class="data row4 col19" >nan</td>
+      <td id="T_069d9_row4_col20" class="data row4 col20" >nan</td>
+      <td id="T_069d9_row4_col21" class="data row4 col21" >nan</td>
+      <td id="T_069d9_row4_col22" class="data row4 col22" >nan</td>
+      <td id="T_069d9_row4_col23" class="data row4 col23" >nan</td>
+      <td id="T_069d9_row4_col24" class="data row4 col24" >nan</td>
+      <td id="T_069d9_row4_col25" class="data row4 col25" >nan</td>
+      <td id="T_069d9_row4_col26" class="data row4 col26" >nan</td>
+      <td id="T_069d9_row4_col27" class="data row4 col27" >nan</td>
+      <td id="T_069d9_row4_col28" class="data row4 col28" >nan</td>
+      <td id="T_069d9_row4_col29" class="data row4 col29" >nan</td>
+      <td id="T_069d9_row4_col30" class="data row4 col30" >nan</td>
+      <td id="T_069d9_row4_col31" class="data row4 col31" >nan</td>
+      <td id="T_069d9_row4_col32" class="data row4 col32" >nan</td>
+      <td id="T_069d9_row4_col33" class="data row4 col33" >nan</td>
+      <td id="T_069d9_row4_col34" class="data row4 col34" >nan</td>
+      <td id="T_069d9_row4_col35" class="data row4 col35" >nan</td>
+      <td id="T_069d9_row4_col36" class="data row4 col36" >nan</td>
+      <td id="T_069d9_row4_col37" class="data row4 col37" >nan</td>
+      <td id="T_069d9_row4_col38" class="data row4 col38" >nan</td>
+    </tr>
+    <tr>
+      <th id="T_069d9_level0_row5" class="row_heading level0 row5" >694</th>
+      <td id="T_069d9_row5_col0" class="data row5 col0" >nan</td>
+      <td id="T_069d9_row5_col1" class="data row5 col1" >nan</td>
+      <td id="T_069d9_row5_col2" class="data row5 col2" >nan</td>
+      <td id="T_069d9_row5_col3" class="data row5 col3" >nan</td>
+      <td id="T_069d9_row5_col4" class="data row5 col4" >nan</td>
+      <td id="T_069d9_row5_col5" class="data row5 col5" >nan</td>
+      <td id="T_069d9_row5_col6" class="data row5 col6" >nan</td>
+      <td id="T_069d9_row5_col7" class="data row5 col7" >nan</td>
+      <td id="T_069d9_row5_col8" class="data row5 col8" >nan</td>
+      <td id="T_069d9_row5_col9" class="data row5 col9" >nan</td>
+      <td id="T_069d9_row5_col10" class="data row5 col10" >nan</td>
+      <td id="T_069d9_row5_col11" class="data row5 col11" >nan</td>
+      <td id="T_069d9_row5_col12" class="data row5 col12" >nan</td>
+      <td id="T_069d9_row5_col13" class="data row5 col13" >nan</td>
+      <td id="T_069d9_row5_col14" class="data row5 col14" >nan</td>
+      <td id="T_069d9_row5_col15" class="data row5 col15" >nan</td>
+      <td id="T_069d9_row5_col16" class="data row5 col16" >nan</td>
+      <td id="T_069d9_row5_col17" class="data row5 col17" >nan</td>
+      <td id="T_069d9_row5_col18" class="data row5 col18" >nan</td>
+      <td id="T_069d9_row5_col19" class="data row5 col19" >nan</td>
+      <td id="T_069d9_row5_col20" class="data row5 col20" >nan</td>
+      <td id="T_069d9_row5_col21" class="data row5 col21" >nan</td>
+      <td id="T_069d9_row5_col22" class="data row5 col22" >nan</td>
+      <td id="T_069d9_row5_col23" class="data row5 col23" >nan</td>
+      <td id="T_069d9_row5_col24" class="data row5 col24" >nan</td>
+      <td id="T_069d9_row5_col25" class="data row5 col25" >nan</td>
+      <td id="T_069d9_row5_col26" class="data row5 col26" >nan</td>
+      <td id="T_069d9_row5_col27" class="data row5 col27" >nan</td>
+      <td id="T_069d9_row5_col28" class="data row5 col28" >nan</td>
+      <td id="T_069d9_row5_col29" class="data row5 col29" >nan</td>
+      <td id="T_069d9_row5_col30" class="data row5 col30" >nan</td>
+      <td id="T_069d9_row5_col31" class="data row5 col31" >nan</td>
+      <td id="T_069d9_row5_col32" class="data row5 col32" >nan</td>
+      <td id="T_069d9_row5_col33" class="data row5 col33" >nan</td>
+      <td id="T_069d9_row5_col34" class="data row5 col34" >nan</td>
+      <td id="T_069d9_row5_col35" class="data row5 col35" >nan</td>
+      <td id="T_069d9_row5_col36" class="data row5 col36" >nan</td>
+      <td id="T_069d9_row5_col37" class="data row5 col37" >nan</td>
+      <td id="T_069d9_row5_col38" class="data row5 col38" >nan</td>
+    </tr>
+    <tr>
+      <th id="T_069d9_level0_row6" class="row_heading level0 row6" >699</th>
+      <td id="T_069d9_row6_col0" class="data row6 col0" >nan</td>
+      <td id="T_069d9_row6_col1" class="data row6 col1" >nan</td>
+      <td id="T_069d9_row6_col2" class="data row6 col2" >nan</td>
+      <td id="T_069d9_row6_col3" class="data row6 col3" >nan</td>
+      <td id="T_069d9_row6_col4" class="data row6 col4" >nan</td>
+      <td id="T_069d9_row6_col5" class="data row6 col5" >nan</td>
+      <td id="T_069d9_row6_col6" class="data row6 col6" >nan</td>
+      <td id="T_069d9_row6_col7" class="data row6 col7" >nan</td>
+      <td id="T_069d9_row6_col8" class="data row6 col8" >nan</td>
+      <td id="T_069d9_row6_col9" class="data row6 col9" >nan</td>
+      <td id="T_069d9_row6_col10" class="data row6 col10" >nan</td>
+      <td id="T_069d9_row6_col11" class="data row6 col11" >nan</td>
+      <td id="T_069d9_row6_col12" class="data row6 col12" >nan</td>
+      <td id="T_069d9_row6_col13" class="data row6 col13" >nan</td>
+      <td id="T_069d9_row6_col14" class="data row6 col14" >nan</td>
+      <td id="T_069d9_row6_col15" class="data row6 col15" >nan</td>
+      <td id="T_069d9_row6_col16" class="data row6 col16" >nan</td>
+      <td id="T_069d9_row6_col17" class="data row6 col17" >nan</td>
+      <td id="T_069d9_row6_col18" class="data row6 col18" >nan</td>
+      <td id="T_069d9_row6_col19" class="data row6 col19" >nan</td>
+      <td id="T_069d9_row6_col20" class="data row6 col20" >nan</td>
+      <td id="T_069d9_row6_col21" class="data row6 col21" >nan</td>
+      <td id="T_069d9_row6_col22" class="data row6 col22" >nan</td>
+      <td id="T_069d9_row6_col23" class="data row6 col23" >nan</td>
+      <td id="T_069d9_row6_col24" class="data row6 col24" >nan</td>
+      <td id="T_069d9_row6_col25" class="data row6 col25" >nan</td>
+      <td id="T_069d9_row6_col26" class="data row6 col26" >nan</td>
+      <td id="T_069d9_row6_col27" class="data row6 col27" >nan</td>
+      <td id="T_069d9_row6_col28" class="data row6 col28" >nan</td>
+      <td id="T_069d9_row6_col29" class="data row6 col29" >nan</td>
+      <td id="T_069d9_row6_col30" class="data row6 col30" >nan</td>
+      <td id="T_069d9_row6_col31" class="data row6 col31" >nan</td>
+      <td id="T_069d9_row6_col32" class="data row6 col32" >nan</td>
+      <td id="T_069d9_row6_col33" class="data row6 col33" >nan</td>
+      <td id="T_069d9_row6_col34" class="data row6 col34" >nan</td>
+      <td id="T_069d9_row6_col35" class="data row6 col35" >nan</td>
+      <td id="T_069d9_row6_col36" class="data row6 col36" >nan</td>
+      <td id="T_069d9_row6_col37" class="data row6 col37" >nan</td>
+      <td id="T_069d9_row6_col38" class="data row6 col38" >nan</td>
+    </tr>
+    <tr>
+      <th id="T_069d9_level0_row7" class="row_heading level0 row7" >777</th>
+      <td id="T_069d9_row7_col0" class="data row7 col0" >nan</td>
+      <td id="T_069d9_row7_col1" class="data row7 col1" >nan</td>
+      <td id="T_069d9_row7_col2" class="data row7 col2" >nan</td>
+      <td id="T_069d9_row7_col3" class="data row7 col3" >nan</td>
+      <td id="T_069d9_row7_col4" class="data row7 col4" >nan</td>
+      <td id="T_069d9_row7_col5" class="data row7 col5" >nan</td>
+      <td id="T_069d9_row7_col6" class="data row7 col6" >nan</td>
+      <td id="T_069d9_row7_col7" class="data row7 col7" >nan</td>
+      <td id="T_069d9_row7_col8" class="data row7 col8" >nan</td>
+      <td id="T_069d9_row7_col9" class="data row7 col9" >nan</td>
+      <td id="T_069d9_row7_col10" class="data row7 col10" >nan</td>
+      <td id="T_069d9_row7_col11" class="data row7 col11" >nan</td>
+      <td id="T_069d9_row7_col12" class="data row7 col12" >nan</td>
+      <td id="T_069d9_row7_col13" class="data row7 col13" >nan</td>
+      <td id="T_069d9_row7_col14" class="data row7 col14" >nan</td>
+      <td id="T_069d9_row7_col15" class="data row7 col15" >nan</td>
+      <td id="T_069d9_row7_col16" class="data row7 col16" >nan</td>
+      <td id="T_069d9_row7_col17" class="data row7 col17" >nan</td>
+      <td id="T_069d9_row7_col18" class="data row7 col18" >nan</td>
+      <td id="T_069d9_row7_col19" class="data row7 col19" >nan</td>
+      <td id="T_069d9_row7_col20" class="data row7 col20" >nan</td>
+      <td id="T_069d9_row7_col21" class="data row7 col21" >nan</td>
+      <td id="T_069d9_row7_col22" class="data row7 col22" >nan</td>
+      <td id="T_069d9_row7_col23" class="data row7 col23" >nan</td>
+      <td id="T_069d9_row7_col24" class="data row7 col24" >nan</td>
+      <td id="T_069d9_row7_col25" class="data row7 col25" >nan</td>
+      <td id="T_069d9_row7_col26" class="data row7 col26" >nan</td>
+      <td id="T_069d9_row7_col27" class="data row7 col27" >nan</td>
+      <td id="T_069d9_row7_col28" class="data row7 col28" >nan</td>
+      <td id="T_069d9_row7_col29" class="data row7 col29" >nan</td>
+      <td id="T_069d9_row7_col30" class="data row7 col30" >nan</td>
+      <td id="T_069d9_row7_col31" class="data row7 col31" >nan</td>
+      <td id="T_069d9_row7_col32" class="data row7 col32" >nan</td>
+      <td id="T_069d9_row7_col33" class="data row7 col33" >nan</td>
+      <td id="T_069d9_row7_col34" class="data row7 col34" >nan</td>
+      <td id="T_069d9_row7_col35" class="data row7 col35" >nan</td>
+      <td id="T_069d9_row7_col36" class="data row7 col36" >nan</td>
+      <td id="T_069d9_row7_col37" class="data row7 col37" >nan</td>
+      <td id="T_069d9_row7_col38" class="data row7 col38" >nan</td>
+    </tr>
+    <tr>
+      <th id="T_069d9_level0_row8" class="row_heading level0 row8" >782</th>
+      <td id="T_069d9_row8_col0" class="data row8 col0" >nan</td>
+      <td id="T_069d9_row8_col1" class="data row8 col1" >nan</td>
+      <td id="T_069d9_row8_col2" class="data row8 col2" >nan</td>
+      <td id="T_069d9_row8_col3" class="data row8 col3" >nan</td>
+      <td id="T_069d9_row8_col4" class="data row8 col4" >nan</td>
+      <td id="T_069d9_row8_col5" class="data row8 col5" >nan</td>
+      <td id="T_069d9_row8_col6" class="data row8 col6" >nan</td>
+      <td id="T_069d9_row8_col7" class="data row8 col7" >nan</td>
+      <td id="T_069d9_row8_col8" class="data row8 col8" >nan</td>
+      <td id="T_069d9_row8_col9" class="data row8 col9" >nan</td>
+      <td id="T_069d9_row8_col10" class="data row8 col10" >nan</td>
+      <td id="T_069d9_row8_col11" class="data row8 col11" >nan</td>
+      <td id="T_069d9_row8_col12" class="data row8 col12" >nan</td>
+      <td id="T_069d9_row8_col13" class="data row8 col13" >nan</td>
+      <td id="T_069d9_row8_col14" class="data row8 col14" >nan</td>
+      <td id="T_069d9_row8_col15" class="data row8 col15" >nan</td>
+      <td id="T_069d9_row8_col16" class="data row8 col16" >nan</td>
+      <td id="T_069d9_row8_col17" class="data row8 col17" >nan</td>
+      <td id="T_069d9_row8_col18" class="data row8 col18" >nan</td>
+      <td id="T_069d9_row8_col19" class="data row8 col19" >nan</td>
+      <td id="T_069d9_row8_col20" class="data row8 col20" >nan</td>
+      <td id="T_069d9_row8_col21" class="data row8 col21" >nan</td>
+      <td id="T_069d9_row8_col22" class="data row8 col22" >nan</td>
+      <td id="T_069d9_row8_col23" class="data row8 col23" >nan</td>
+      <td id="T_069d9_row8_col24" class="data row8 col24" >nan</td>
+      <td id="T_069d9_row8_col25" class="data row8 col25" >nan</td>
+      <td id="T_069d9_row8_col26" class="data row8 col26" >nan</td>
+      <td id="T_069d9_row8_col27" class="data row8 col27" >nan</td>
+      <td id="T_069d9_row8_col28" class="data row8 col28" >nan</td>
+      <td id="T_069d9_row8_col29" class="data row8 col29" >nan</td>
+      <td id="T_069d9_row8_col30" class="data row8 col30" >nan</td>
+      <td id="T_069d9_row8_col31" class="data row8 col31" >nan</td>
+      <td id="T_069d9_row8_col32" class="data row8 col32" >nan</td>
+      <td id="T_069d9_row8_col33" class="data row8 col33" >nan</td>
+      <td id="T_069d9_row8_col34" class="data row8 col34" >nan</td>
+      <td id="T_069d9_row8_col35" class="data row8 col35" >nan</td>
+      <td id="T_069d9_row8_col36" class="data row8 col36" >nan</td>
+      <td id="T_069d9_row8_col37" class="data row8 col37" >nan</td>
+      <td id="T_069d9_row8_col38" class="data row8 col38" >nan</td>
+    </tr>
+    <tr>
+      <th id="T_069d9_level0_row9" class="row_heading level0 row9" >966</th>
+      <td id="T_069d9_row9_col0" class="data row9 col0" >nan</td>
+      <td id="T_069d9_row9_col1" class="data row9 col1" >nan</td>
+      <td id="T_069d9_row9_col2" class="data row9 col2" >nan</td>
+      <td id="T_069d9_row9_col3" class="data row9 col3" >nan</td>
+      <td id="T_069d9_row9_col4" class="data row9 col4" >nan</td>
+      <td id="T_069d9_row9_col5" class="data row9 col5" >nan</td>
+      <td id="T_069d9_row9_col6" class="data row9 col6" >nan</td>
+      <td id="T_069d9_row9_col7" class="data row9 col7" >nan</td>
+      <td id="T_069d9_row9_col8" class="data row9 col8" >nan</td>
+      <td id="T_069d9_row9_col9" class="data row9 col9" >nan</td>
+      <td id="T_069d9_row9_col10" class="data row9 col10" >nan</td>
+      <td id="T_069d9_row9_col11" class="data row9 col11" >nan</td>
+      <td id="T_069d9_row9_col12" class="data row9 col12" >nan</td>
+      <td id="T_069d9_row9_col13" class="data row9 col13" >nan</td>
+      <td id="T_069d9_row9_col14" class="data row9 col14" >nan</td>
+      <td id="T_069d9_row9_col15" class="data row9 col15" >nan</td>
+      <td id="T_069d9_row9_col16" class="data row9 col16" >nan</td>
+      <td id="T_069d9_row9_col17" class="data row9 col17" >nan</td>
+      <td id="T_069d9_row9_col18" class="data row9 col18" >nan</td>
+      <td id="T_069d9_row9_col19" class="data row9 col19" >nan</td>
+      <td id="T_069d9_row9_col20" class="data row9 col20" >nan</td>
+      <td id="T_069d9_row9_col21" class="data row9 col21" >nan</td>
+      <td id="T_069d9_row9_col22" class="data row9 col22" >nan</td>
+      <td id="T_069d9_row9_col23" class="data row9 col23" >nan</td>
+      <td id="T_069d9_row9_col24" class="data row9 col24" >nan</td>
+      <td id="T_069d9_row9_col25" class="data row9 col25" >nan</td>
+      <td id="T_069d9_row9_col26" class="data row9 col26" >nan</td>
+      <td id="T_069d9_row9_col27" class="data row9 col27" >nan</td>
+      <td id="T_069d9_row9_col28" class="data row9 col28" >nan</td>
+      <td id="T_069d9_row9_col29" class="data row9 col29" >nan</td>
+      <td id="T_069d9_row9_col30" class="data row9 col30" >nan</td>
+      <td id="T_069d9_row9_col31" class="data row9 col31" >nan</td>
+      <td id="T_069d9_row9_col32" class="data row9 col32" >nan</td>
+      <td id="T_069d9_row9_col33" class="data row9 col33" >nan</td>
+      <td id="T_069d9_row9_col34" class="data row9 col34" >nan</td>
+      <td id="T_069d9_row9_col35" class="data row9 col35" >nan</td>
+      <td id="T_069d9_row9_col36" class="data row9 col36" >nan</td>
+      <td id="T_069d9_row9_col37" class="data row9 col37" >nan</td>
+      <td id="T_069d9_row9_col38" class="data row9 col38" >nan</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Do you notice that the <code class="docutils literal notranslate"><span class="pre">CELL_ID</span></code> is not continuing, and there are a lot of <code class="docutils literal notranslate"><span class="pre">NaN</span></code> values in the dataframe? The discontinuity <code class="docutils literal notranslate"><span class="pre">CELL_ID</span></code> is due to data masking, and the None value comes from the exclusion masking. Essentialy, the data masking means we have removed some cells that will never be used in the analysis (e.g., cells cover sea, water, and intensive land-use like urban), and the None value indicates that the coresponding land-use can’t exist in this cell. Let’s plot the productivity data (<code class="docutils literal notranslate"><span class="pre">yield</span></code> record for crops, <code class="docutils literal notranslate"><span class="pre">P1/2/3</span></code> for livestock), have a visual on it, and then explain the data masking and exclusion masking.</p>
+</div>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<img alt="_images/42f2c35e570aad933f2027e6be204f41f6a175dad993fb3e9242c20662a6e2bc.png" src="_images/42f2c35e570aad933f2027e6be204f41f6a175dad993fb3e9242c20662a6e2bc.png" />
+</div>
+</div>
+<p>As discussed before, the productivity data need to be divided by water supply attribution (dry or irrigated). In addition, we can see there are 4 types of cells in the map:</p>
+<ul class="simple">
+<li><p>white (or transparent) cells outside the continental Australia,</p></li>
+<li><p>white (or transparent) cells inside the continental Australia,</p></li>
+<li><p>dark purple cells (with -1 value) covers the non-agricultural land-use (water, desert, urban, etc.).</p></li>
+<li><p>colorful cells with values &gt;= 0 and convey physical information (yield in this case).</p></li>
+</ul>
+<p>Now let’s discuss why we need data masking. A fact about these 2D maps is that even though we only care about the yield data, the computer still needs to store the white (transparent) cells! A glance at these maps could give us a quick estimate that more than half of the map’s space was used to store meaningless information; that’s not a good idea, and LUTO indeed has a way to deal with this waste. Below are the steps for LUTO to remove unnecessary data/cells.</p>
+<p>First, LUTO will drop the cells that cover the sea (outside continental Australia) using a national land-use mask (plotted below).</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<img alt="_images/f06bf36700428b5895bd25c016e9092cee87a2f92b56bacc6a8ec70fa4d610c9.png" src="_images/f06bf36700428b5895bd25c016e9092cee87a2f92b56bacc6a8ec70fa4d610c9.png" />
+</div>
+</div>
+<p>Next, LUTO uses a ‘Land-use mask’ to remove the non-agricultural land-use (e.g., water, desert, urban, etc.)</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<img alt="_images/f1e617b80da333575eb87145e1eb27296bdfb20082c96130eb7b9f6e26b6c444.png" src="_images/f1e617b80da333575eb87145e1eb27296bdfb20082c96130eb7b9f6e26b6c444.png" />
+</div>
+</div>
+<p>The ‘National land-use mask’ and ‘Land-use mask’ apply to all input data, but the exclusion mask is created separately for each land-use. In our case, the exclusion mask is a map indicating where is <strong>suitable</strong> and where is <strong>not suitable</strong> for caltivating winter cereal. LUTO uses a simple method to determine suitability for winter cereal: out of every <a class="reference external" href="https://www.abs.gov.au/statistics/standards/australian-statistical-geography-standard-asgs-edition-3/jul2021-jun2026/main-structure-and-greater-capital-city-statistical-areas/statistical-area-level-2">SA2</a> region, if this region had winter cereal in 2010, then the whole region would be suitable for winter cereal planting; otherwise, this region would be excluded from planting winter cereal in the future. In this manual, we will sum up all winter cereal cells in each SA2 region and make a plot to visulize this idea.</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<img alt="_images/273b77acd05a413fdda336f5806d9c7c0b3e0458a9b73c23d7dcf964ebfb7ce4.png" src="_images/273b77acd05a413fdda336f5806d9c7c0b3e0458a9b73c23d7dcf964ebfb7ce4.png" />
+</div>
+</div>
+<p>Now the last piece for productivity is completed! If you look at the above exclusion masks and compare them with the yield map of winter cereal, you will find that yield data only exist in the’suitable SA2 regions’, which is a way to avoid its plantation outside the suitable zones.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>We noticed that some SA2 regions have only a few winter cereal plantations but cover a large area that is not suitable for winter cereal’s cultivation. This is a known issue in LUTO and will be fixed in the near future.</p>
+</div>
+<p>OK, we have yield for winter cereal, but something is still missing. The yield map only represents the productivity for 2010, and we want to get the yield for the whole 2010–2100 period. Because crop productivity is primarily determined by climate change, we will use it as a proxy to extend yield from 2010 to 2100.</p>
+</section>
+<section id="climate-change-impacts">
+<h2><span class="section-number">2.2. </span>Climate change impacts<a class="headerlink" href="#climate-change-impacts" title="Link to this heading">#</a></h2>
+<p>We used the <code class="docutils literal notranslate"><span class="pre">attainable</span> <span class="pre">yield</span></code> data from <a class="reference external" href="https://gaez.fao.org/">GAEZ</a> to calculate climate change’s impact on crop yield. Attainable yield is the maximum yield under optimal management practices and without the limitations of water, nutrients, pests, or diseases, but within the constraints of local climate and soil conditions. It is safe to say that attainable yield is directly related to climate change, and that’s why we (and many other studies) use it to quantify climate change’s influences on crops.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>GAEZ attainable yield includes several climate models (CRUTS32, GFDL-ESM2M, HadGEM2-ES, IPSL-CM5A-LR, MIROC-ESM-CHEM, NorESM1-M). In LUTO, we used the mean value across all models as the input attainable yield. Climate change is also predicted to have different paths. LUTO has a <code class="docutils literal notranslate"><span class="pre">settings.RCP</span></code> (one of rcp2p6, rcp4p5, rcp6p0, and rcp8p5) to specify the climate change scenarios. Note that this scenario setting is shared among many input data (demand, biodiversity, water use, etc.). In addition to RCP, the assumption on CO2 fertilization effect also has significant impacts on attainable yield, and LUTO has a <code class="docutils literal notranslate"><span class="pre">settings.CO2_FERT</span></code> (‘on’ or ‘off’) for us to choose if we want to include this effect.</p>
+</div>
+<p>In this manual, we chose the <code class="docutils literal notranslate"><span class="pre">settings.rcp</span> <span class="pre">==</span> <span class="pre">'rcp4p5'</span></code> scenario and plotted the climate impact below. From it, we can see that climate change impact is introduced as a multiplier to crop yield. The climate change in 2050 is mostly positive for winter cereal. Also, note that this impact multiplier only exists in the’suitable zones’, which means that we have intentionally excluded winter cereal from cultivating in unsuitable areas.</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<img alt="_images/7f4f8062e53d1bca742bda17fbd77aa6b9850cfd0b18b77c0b90f24524f566b1.png" src="_images/7f4f8062e53d1bca742bda17fbd77aa6b9850cfd0b18b77c0b90f24524f566b1.png" />
+</div>
+</div>
+<p>If you are curious about climate change’s impact under different <code class="docutils literal notranslate"><span class="pre">RCP</span></code> and <code class="docutils literal notranslate"><span class="pre">CO2</span> <span class="pre">Fertilization</span></code> effects, we have prepared a plot to illustrate the mean value of all climate change multipliers below. We can see that winter cereal’s yields under dry and irrigated water supplies are significantly different. Also note the opposite trend of yield trajectory prediction under different CO2 fertilization effects. It is clear that we have to be very careful when choosing the right RCP and CO2_fert parameters in LUTO because different assumptions will lead to very different agricultural productivity in the future!</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="_images/1c5a74e358ddd31ec4d37ee4f1d173da25e6e5c8fc608895b00dda370bd71b1f.png"><img alt="_images/1c5a74e358ddd31ec4d37ee4f1d173da25e6e5c8fc608895b00dda370bd71b1f.png" src="_images/1c5a74e358ddd31ec4d37ee4f1d173da25e6e5c8fc608895b00dda370bd71b1f.png" style="width: 800px; height: 1000px;" /></a>
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="Chap_1_1_LUTO_overview-1.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><span class="section-number">1. </span>Land-use Map and Demand</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="Chap_1_1_LUTO_overview-3.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><span class="section-number">3. </span>Finding the Optimized Solution to Meet Demand</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#economic-environmental-and-productivity-data">2.1. Economic, Environmental, and productivity data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#climate-change-impacts">2.2. Climate change impacts</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Jinzhu WANG, Hossein Aghighi, and Brett A. Bryan
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
