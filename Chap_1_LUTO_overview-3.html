@@ -61,7 +61,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'Chap_1_LUTO_overview-3';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="2. Productivity, economic, and environmental data" href="Chap_1_LUTO_overview-2.html" />
+    <link rel="prev" title="2. Input data" href="Chap_1_LUTO_overview-2.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -182,7 +182,7 @@
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Quick Overview</span></p>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="Chap_1_LUTO_overview-1.html">1. Land-use Map and Demand</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Chap_1_LUTO_overview-2.html">2. Productivity, economic, and environmental data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Chap_1_LUTO_overview-2.html">2. Input data</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">3. Apply Constraints</a></li>
 </ul>
 
@@ -898,58 +898,7 @@ Coordinates:
 </section>
 <section id="cost-and-revenue">
 <h2><span class="section-number">3.4. </span>Cost and Revenue<a class="headerlink" href="#cost-and-revenue" title="Link to this heading">#</a></h2>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># REMOVE</span>
-
-<span class="c1"># Area Cost, Fixed Depreciation Cost, Fixed Labour Cost, Fixed Operating Cost   </span>
-<span class="n">c_fix</span> <span class="o">=</span> <span class="n">agec_crops_xr_lu</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">Type</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;AC&#39;</span><span class="p">,</span> <span class="s1">&#39;FDC&#39;</span><span class="p">,</span> <span class="s1">&#39;FLC&#39;</span><span class="p">,</span> <span class="s1">&#39;FOC&#39;</span><span class="p">])</span>       <span class="c1"># $/ha</span>
-
-<span class="c1"># Quantity Cost</span>
-<span class="n">c_q</span> <span class="o">=</span> <span class="n">agec_crops_xr_lu</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">Type</span><span class="o">=</span><span class="s1">&#39;QC&#39;</span><span class="p">)</span> <span class="o">*</span> <span class="n">q_lu_target</span>                  <span class="c1"># $/ha</span>
-
-<span class="c1"># Water Cost</span>
-<span class="n">c_wr</span> <span class="o">=</span> <span class="n">agec_crops_xr_lu</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">Type</span><span class="o">=</span><span class="s1">&#39;WP&#39;</span><span class="p">)</span> <span class="o">*</span> <span class="n">wr_mrj_xr_lu</span>                <span class="c1"># $/ha          </span>
-
-<span class="c1"># Revenue</span>
-<span class="n">r</span> <span class="o">=</span> <span class="n">agec_crops_xr_lu</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">Type</span><span class="o">=</span><span class="s1">&#39;P1&#39;</span><span class="p">)</span> <span class="o">*</span> <span class="n">q_lu_target</span>                    <span class="c1"># $/ha   </span>
-
-
-<span class="c1">###########    Total Cost    ###########</span>
-<span class="n">c_total</span> <span class="o">=</span> <span class="n">c_fix</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="s1">&#39;Type&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="n">c_q</span> <span class="o">+</span> <span class="n">c_wr</span>                         <span class="c1"># $/ha  </span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># HIDE CODE</span>
-
-<span class="n">c_arr</span> <span class="o">=</span> <span class="n">c_total</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lu</span><span class="o">=</span><span class="n">lu_desc</span><span class="o">.</span><span class="n">upper</span><span class="p">())</span><span class="o">.</span><span class="n">drop_vars</span><span class="p">(</span><span class="s1">&#39;spatial_ref&#39;</span><span class="p">)</span>
-
-<span class="c1"># REMOVE</span>
-<span class="n">c_dry</span> <span class="o">=</span> <span class="n">c_arr</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lm</span><span class="o">=</span><span class="s1">&#39;dry&#39;</span><span class="p">)</span>
-<span class="n">c_irr</span> <span class="o">=</span> <span class="n">c_arr</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lm</span><span class="o">=</span><span class="s1">&#39;irr&#39;</span><span class="p">)</span>
-
-<span class="n">plot_dry_irr</span><span class="p">(</span><span class="n">c_dry</span><span class="p">,</span> <span class="n">c_irr</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<img alt="_images/2682ad45939429bcd0be60b57d0bdee565125856c64cb0d6c174899a96cb3d58.png" src="_images/2682ad45939429bcd0be60b57d0bdee565125856c64cb0d6c174899a96cb3d58.png" />
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># HIDE CODE</span>
-
-<span class="n">r_dry</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lm</span><span class="o">=</span><span class="s1">&#39;dry&#39;</span><span class="p">,</span> <span class="n">lu</span><span class="o">=</span><span class="n">lu_desc</span><span class="o">.</span><span class="n">upper</span><span class="p">())</span><span class="o">.</span><span class="n">drop_vars</span><span class="p">(</span><span class="s1">&#39;spatial_ref&#39;</span><span class="p">)</span>
-<span class="n">r_irr</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lm</span><span class="o">=</span><span class="s1">&#39;irr&#39;</span><span class="p">,</span> <span class="n">lu</span><span class="o">=</span><span class="n">lu_desc</span><span class="o">.</span><span class="n">upper</span><span class="p">())</span><span class="o">.</span><span class="n">drop_vars</span><span class="p">(</span><span class="s1">&#39;spatial_ref&#39;</span><span class="p">)</span>
-
-<span class="n">plot_dry_irr</span><span class="p">(</span><span class="n">r_dry</span><span class="p">,</span> <span class="n">r_irr</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
+<div class="cell tag_remove-input docutils container">
 <div class="cell_output docutils container">
 <img alt="_images/8fd753014cc013bb700038b04ac2c9c8bad2021e9df564d79ea461404abfc644.png" src="_images/8fd753014cc013bb700038b04ac2c9c8bad2021e9df564d79ea461404abfc644.png" />
 </div>
@@ -1808,7 +1757,7 @@ Data variables:
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title"><span class="section-number">2. </span>Productivity, economic, and environmental data</p>
+        <p class="prev-next-title"><span class="section-number">2. </span>Input data</p>
       </div>
     </a>
 </div>
